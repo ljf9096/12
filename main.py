@@ -42,6 +42,7 @@ ws_lines = [] #卫视频道
 ty_lines = [] #体育频道
 dy_lines = [] #电影频道
 dsj_lines = [] #电视剧频道
+gat_lines = [] #港澳台
 twt_lines = [] #台湾台
 gj_lines = [] #国际台
 jlp_lines = [] #记录片
@@ -684,6 +685,7 @@ print(f"others.txt行数: {other_lines_hj} ")
 #备用1：http://tonkiang.us
 #备用2：https://www.zoomeye.hk,https://www.shodan.io,https://tv.cctv.com/live/
 #备用3：(BlackList检测对象)http,rtmp,p3p,rtp（rtsp，p2p）
+
 
 
 
