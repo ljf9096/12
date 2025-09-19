@@ -447,7 +447,10 @@ all_lines =  all_lines_simple + ['\n'] + \
              ["四川频道,#genre#"] + sorted(sc_lines) + ['\n'] + \
              ["天津频道,#genre#"] + sorted(tj_lines) + ['\n'] + \
              ["新疆频道,#genre#"] + sorted(xj_lines) + ['\n'] + \
-             
+             ["春晚,#genre#"] + sort_data(cw_dictionary,cw_lines)  + ['\n'] + \
+             ["直播中国,#genre#"] + sorted(zb_lines) + ['\n'] + \
+             ["MTV,#genre#"] + sorted(mtv_lines) + ['\n'] + \
+             ["收音机频道,#genre#"] + sort_data(radio_dictionary,radio_lines)
 
 # 将合并后的文本写入文件
 output_file = "live.txt"
@@ -532,6 +535,7 @@ print(f"others.txt行数: {other_lines_hj} ")
 #备用1：http://tonkiang.us
 #备用2：https://www.zoomeye.hk,https://www.shodan.io,https://tv.cctv.com/live/
 #备用3：(BlackList检测对象)http,rtmp,p3p,rtp（rtsp，p2p）
+
 
 
 
