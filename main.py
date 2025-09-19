@@ -403,7 +403,6 @@ all_lines_simple =  ["更新时间,#genre#"] + [version] +[about]+['\n'] +\
                     ["电视剧频道,#genre#"] + sort_data(dsj_dictionary,dsj_lines) + ['\n'] + \
                     ["综艺频道,#genre#"] + sort_data(zy_dictionary,zy_lines) + ['\n'] + \
                     ["NewTV,#genre#"] + sort_data(newtv_dictionary,newtv_lines) + ['\n'] + \
-                    ["iHOT,#genre#"] + sort_data(ihot_dictionary,ihot_lines) + ['\n'] + \
                     ["体育频道,#genre#"] + sort_data(ty_dictionary,ty_lines) + ['\n'] + \
                     ["咪咕直播,#genre#"] + sort_data(migu_dictionary,migu_lines)+ ['\n'] + \
                     ["埋堆堆,#genre#"] + sort_data(mdd_dictionary,mdd_lines) + ['\n'] + \
@@ -535,6 +534,7 @@ print(f"others.txt行数: {other_lines_hj} ")
 #备用1：http://tonkiang.us
 #备用2：https://www.zoomeye.hk,https://www.shodan.io,https://tv.cctv.com/live/
 #备用3：(BlackList检测对象)http,rtmp,p3p,rtp（rtsp，p2p）
+
 
 
 
