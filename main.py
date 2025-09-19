@@ -397,7 +397,19 @@ about="关于本源(塔利班维护),"+about_video2
 all_lines_simple =  ["更新时间,#genre#"] + [version] +[about]+['\n'] +\
                     ["央视频道,#genre#"] + read_txt_to_array('专区/央视频道.txt') + sort_data(ys_dictionary,ys_lines) + ['\n'] + \
                     ["卫视频道,#genre#"] + read_txt_to_array('专区/卫视频道.txt') + sort_data(ws_dictionary,ws_lines) + ['\n'] + \
+                    ["港澳台,#genre#"] + read_txt_to_array('专区/港澳台.txt') + sort_data(gat_dictionary,gat_lines) + ['\n'] + \
+                    ["台湾台,#genre#"] + read_txt_to_array('专区/台湾台.txt') + sort_data(twt_dictionary,twt_lines) + ['\n'] + \
+                    ["电影频道,#genre#"] + sort_data(dy_dictionary,dy_lines) + ['\n'] + \
+                    ["电视剧频道,#genre#"] + sort_data(dsj_dictionary,dsj_lines) + ['\n'] + \
+                    ["综艺频道,#genre#"] + sort_data(zy_dictionary,zy_lines) + ['\n'] + \
                     ["NewTV,#genre#"] + sort_data(newtv_dictionary,newtv_lines) + ['\n'] + \
+                    ["iHOT,#genre#"] + sort_data(ihot_dictionary,ihot_lines) + ['\n'] + \
+                    ["体育频道,#genre#"] + sort_data(ty_dictionary,ty_lines) + ['\n'] + \
+                    ["咪咕直播,#genre#"] + sort_data(migu_dictionary,migu_lines)+ ['\n'] + \
+                    ["埋堆堆,#genre#"] + sort_data(mdd_dictionary,mdd_lines) + ['\n'] + \
+                    ["音乐频道,#genre#"] + sorted(yy_lines) + ['\n'] + \
+                    ["游戏频道,#genre#"] + sorted(game_lines) + ['\n'] + \
+                    ["解说频道,#genre#"] + sorted(js_lines)
                     
 # 合并所有对象中的行文本（去重，排序后拼接）
 all_lines =  all_lines_simple + ['\n'] + \
@@ -435,10 +447,7 @@ all_lines =  all_lines_simple + ['\n'] + \
              ["四川频道,#genre#"] + sorted(sc_lines) + ['\n'] + \
              ["天津频道,#genre#"] + sorted(tj_lines) + ['\n'] + \
              ["新疆频道,#genre#"] + sorted(xj_lines) + ['\n'] + \
-             ["春晚,#genre#"] + sort_data(cw_dictionary,cw_lines)  + ['\n'] + \
-             ["直播中国,#genre#"] + sorted(zb_lines) + ['\n'] + \
-             ["MTV,#genre#"] + sorted(mtv_lines) + ['\n'] + \
-             ["收音机频道,#genre#"] + sort_data(radio_dictionary,radio_lines)
+             
 
 # 将合并后的文本写入文件
 output_file = "live.txt"
@@ -523,6 +532,7 @@ print(f"others.txt行数: {other_lines_hj} ")
 #备用1：http://tonkiang.us
 #备用2：https://www.zoomeye.hk,https://www.shodan.io,https://tv.cctv.com/live/
 #备用3：(BlackList检测对象)http,rtmp,p3p,rtp（rtsp，p2p）
+
 
 
 
