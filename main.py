@@ -388,8 +388,6 @@ utc_time = datetime.now(timezone.utc)
 beijing_time = utc_time + timedelta(hours=8)
 # 格式化为所需的格式
 formatted_time = beijing_time.strftime("%Y%m%d %H:%M")
-about_video1="https://d.kstore.dev/download/8880/%E5%85%AC%E5%91%8A.mp4"
-about_video2="https://v.cdnlz12.com/20250131/18183_a5e8965b/index.m3u8"
 version=formatted_time+","+about_video1
 about="关于本源(塔利班维护),"+about_video2
 
@@ -397,11 +395,6 @@ about="关于本源(塔利班维护),"+about_video2
 all_lines_simple =  ["更新时间,#genre#"] + [version] +[about]+['\n'] +\
                     ["央视频道,#genre#"] + read_txt_to_array('专区/央视频道.txt') + sort_data(ys_dictionary,ys_lines) + ['\n'] + \
                     ["卫视频道,#genre#"] + read_txt_to_array('专区/卫视频道.txt') + sort_data(ws_dictionary,ws_lines) + ['\n'] + \
-                    ["港澳台,#genre#"] + read_txt_to_array('专区/港澳台.txt') + sort_data(gat_dictionary,gat_lines) + ['\n'] + \
-                    ["台湾台,#genre#"] + read_txt_to_array('专区/台湾台.txt') + sort_data(twt_dictionary,twt_lines) + ['\n'] + \
-                    ["电影频道,#genre#"] + sort_data(dy_dictionary,dy_lines) + ['\n'] + \
-                    ["电视剧频道,#genre#"] + sort_data(dsj_dictionary,dsj_lines) + ['\n'] + \
-                    ["综艺频道,#genre#"] + sort_data(zy_dictionary,zy_lines) + ['\n'] + \
                     ["NewTV,#genre#"] + sort_data(newtv_dictionary,newtv_lines) + ['\n'] + \
                     ["解说频道,#genre#"] + sorted(js_lines)
                     
@@ -530,6 +523,7 @@ print(f"others.txt行数: {other_lines_hj} ")
 #备用1：http://tonkiang.us
 #备用2：https://www.zoomeye.hk,https://www.shodan.io,https://tv.cctv.com/live/
 #备用3：(BlackList检测对象)http,rtmp,p3p,rtp（rtsp，p2p）
+
 
 
 
