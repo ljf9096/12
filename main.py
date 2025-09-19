@@ -105,6 +105,7 @@ ws_dictionary=read_txt_to_array('主频道/卫视频道.txt')
 ty_dictionary=read_txt_to_array('主频道/体育频道.txt') 
 dy_dictionary=read_txt_to_array('主频道/电影.txt') 
 dsj_dictionary=read_txt_to_array('主频道/电视剧.txt') 
+gat_dictionary=read_txt_to_array('主频道/港澳台.txt') 
 twt_dictionary=read_txt_to_array('主频道/台湾台.txt')
 gj_dictionary=read_txt_to_array('主频道/国际台.txt') 
 jlp_dictionary=read_txt_to_array('主频道/纪录片.txt') 
@@ -288,6 +289,9 @@ def process_channel_line(line):
             elif channel_name in dsj_dictionary: #电视剧频道
                 if check_url_existence(dsj_lines, channel_address):  
                     dsj_lines.append(line)
+            elif channel_name in gat_dictionary: #港澳台
+                if check_url_existence(gat_lines, channel_address):
+                    gat_lines.append(line)
             elif channel_name in twt_dictionary: #台湾台
                 if check_url_existence(twt_lines, channel_address):
                     twt_lines.append(line)            
@@ -680,8 +684,6 @@ print(f"others.txt行数: {other_lines_hj} ")
 #备用1：http://tonkiang.us
 #备用2：https://www.zoomeye.hk,https://www.shodan.io,https://tv.cctv.com/live/
 #备用3：(BlackList检测对象)http,rtmp,p3p,rtp（rtsp，p2p）
-
-
 
 
 
