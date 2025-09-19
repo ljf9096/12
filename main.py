@@ -103,6 +103,13 @@ whitelist_auto_lines=read_txt_to_array('assets/whitelist-blacklist/whitelist_aut
 # 主频道
 ys_dictionary=read_txt_to_array('主频道/央视频道.txt')
 ws_dictionary=read_txt_to_array('主频道/卫视频道.txt') 
+ty_dictionary=read_txt_to_array('主频道/体育频道.txt') 
+dy_dictionary=read_txt_to_array('主频道/电影.txt') 
+dsj_dictionary=read_txt_to_array('主频道/电视剧.txt') 
+gat_dictionary=read_txt_to_array('主频道/港澳台.txt') 
+twt_dictionary=read_txt_to_array('主频道/台湾台.txt')
+gj_dictionary=read_txt_to_array('主频道/国际台.txt') 
+jlp_dictionary=read_txt_to_array('主频道/纪录片.txt') 
 xq_dictionary=read_txt_to_array('主频道/戏曲频道.txt') 
 js_dictionary=read_txt_to_array('主频道/解说频道.txt') 
 cw_dictionary=read_txt_to_array('主频道/春晚.txt') 
@@ -274,9 +281,6 @@ def process_channel_line(line):
             elif channel_name in ws_dictionary: #卫视频道
                 if check_url_existence(ws_lines, channel_address):
                     ws_lines.append(line)
-            elif channel_name in ty_dictionary: #体育频道
-                if check_url_existence(ty_lines, channel_address):
-                    ty_lines.append(line)
             elif channel_name in dy_dictionary: #电影频道
                 if check_url_existence(dy_lines, channel_address):  
                     dy_lines.append(line)
@@ -678,6 +682,7 @@ print(f"others.txt行数: {other_lines_hj} ")
 #备用1：http://tonkiang.us
 #备用2：https://www.zoomeye.hk,https://www.shodan.io,https://tv.cctv.com/live/
 #备用3：(BlackList检测对象)http,rtmp,p3p,rtp（rtsp，p2p）
+
 
 
 
