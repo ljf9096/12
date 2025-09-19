@@ -103,7 +103,6 @@ whitelist_auto_lines=read_txt_to_array('assets/whitelist-blacklist/whitelist_aut
 # 主频道
 ys_dictionary=read_txt_to_array('主频道/央视频道.txt')
 ws_dictionary=read_txt_to_array('主频道/卫视频道.txt') 
-ty_dictionary=read_txt_to_array('主频道/体育频道.txt') 
 dy_dictionary=read_txt_to_array('主频道/电影.txt') 
 dsj_dictionary=read_txt_to_array('主频道/电视剧.txt') 
 gat_dictionary=read_txt_to_array('主频道/港澳台.txt') 
