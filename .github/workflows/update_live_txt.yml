@@ -1,8 +1,6 @@
 name: M3U 直播源更新到 live.txt
 
 on:
-  schedule:
-    - cron: "0 */12 * * *"  # 每两小时运行一次
   workflow_dispatch:
 
 jobs:
