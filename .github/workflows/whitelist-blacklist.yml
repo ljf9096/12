@@ -1,8 +1,6 @@
 name: 'WhiteList BlackList'
 
 on:
-  schedule:
-    - cron: '0 16 * * 4' # 每周四 16:00 UTC
   workflow_dispatch:
 
 jobs:
