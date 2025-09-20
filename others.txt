@@ -44,14 +44,8 @@ https://tv.iill.top/m3u/Live,#genre#
 
 
 https://tv.iill.top/m3u/Sport,#genre#
-
-
 https://live.freetv.top/huyayqk.m3u,#genre#
-
-
 https://live.freetv.top/douyuyqk.m3u,#genre#
-
-
 https://live.zhoujie218.top/tv/iptv4.txt,#genre#
 
 
