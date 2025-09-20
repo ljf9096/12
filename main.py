@@ -340,10 +340,9 @@ class TVChannelProcessor:
         beijing_time = utc_time + timedelta(hours=8)
         formatted_time = beijing_time.strftime("%Y%m%d %H:%M")
         
-        about_video1 = "https://d.kstore.dev/download/8880/%E5%85%AC%E5%91%8A.mp4"
-        about_video2 = "https://v.cdnlz12.com/20250131/18183_a5e8965b/index.m3u8"
-        version = f"{formatted_time},{about_video1}"
-        about = f"关于本源(塔利班维护),{about_video2}"
+        # 移除视频链接，只保留更新时间
+        version = f"{formatted_time}"
+        about = "关于本源"
         
         # Generate content for simple version
         all_lines_simple = [
@@ -392,5 +391,3 @@ class TVChannelProcessor:
 if __name__ == "__main__":
     processor = TVChannelProcessor()
     processor.run()
-
-
