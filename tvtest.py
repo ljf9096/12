@@ -17,7 +17,7 @@ results = []
 channels = []
 error_channels = []
 
-with open("tvlist.txt", 'r', encoding='utf-8') as file:
+with open("live.txt", 'r', encoding='utf-8') as file:
     lines = file.readlines()
     for line in lines:
         line = line.strip()
