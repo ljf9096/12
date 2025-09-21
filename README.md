@@ -1,17 +1,7 @@
-## 更新频率(北京时间)
-|直播源|黑白名单|
-| ---- | ---- |
-|每日4点|每周五0点|
+此代码注释详细！1、.github/workflows/whitelist-blacklist.yml名WhiteList BlackList，执行assets/whitelist-blacklist/main.py，生成./assets/whitelist-blacklist/*，黑白名单。运行约110分钟。
+2、.github/workflows/main.yml，名Daily Job，内main.py生成zb源live.txt live.m3u live_lite.txtlive_lite.m3u others.txt。运行约9分。
+3、assets/whitelist-blacklist/main.py，生成黑白名单blackhost_count.txt、blacklist_auto.txt、  whitelist_auto.txt、whitelist_auto_tv.txt。
+4、assets/corrections_name.txt下为需要的中央台，可修改。
+5、主频道内为需要中央台、NewTV及卫视台，可修改。地方台下为需要的各省地方台，可增减，但不能没有。
 
 
-![telegram-cloud-photo-size-1-4902173344514813668-y](https://github.com/user-attachments/assets/3b641fd5-cb40-4d0d-abc7-7ffe4f494d88)
-
-# 免责声明
-
-> [!important]
->
-> 1. 本仓库仅供学习使用，请尊重版权，请勿利用此仓库从事商业行为及非法用途!
-> 2. 使用本仓库的过程中可能会产生版权数据。对于这些版权数据，本仓库不拥有它们的所有权。为了避免侵权，使用者务必在 24小时内清除使用本仓库的过程中所产生的版权数据。
-> 3. 由于使用本仓库产生的包括由于本协议或由于使用或无法使用本仓库而引起的任何性质的任何直接、间接、特殊、偶然或结果性损害（包括但不限于因商誉损失、停工、计算机故障或故障引起的损害赔偿，或任何及所有其他商业损害或损失）由使用者负责。
-> 4. **禁止在违反当地法律法规的情况下使用本仓库。** 对于使用者在明知或不知当地法律法规不允许的情况下使用本仓库所造成的任何违法违规行为由使用者承担，本仓库不承担由此造成的任何直接、间接、特殊、偶然或结果性责任。
-> 5. 如果官方平台觉得本仓库不妥，可联系本仓库更改或移除。
