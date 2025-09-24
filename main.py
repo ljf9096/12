@@ -14,44 +14,13 @@ class TVChannelProcessor:
         self.combined_blacklist = set()
         self.all_urls = set()
         
-        # 初始化频道容器
-        self.init_channel_containers()
+        # 初始化频道容器 - 只保留三个分类
+        self.ys_lines = []  # 央视频道
+        self.ws_lines = []  # 卫视频道
+        self.newtv_lines = []  # NewTV频道
         
         # 存储每个频道的URL和响应时间
         self.channel_data = defaultdict(list)
-        
-    def init_channel_containers(self):
-        # 主频道分类
-        self.ys_lines = []  # 央视
-        self.ws_lines = []  # 卫视
-        self.ty_lines = []  # 体育
-        self.dy_lines = []  # 电影
-        self.dsj_lines = []  # 电视剧
-        self.gat_lines = []  # 港澳台
-        self.twt_lines = []  # 台湾
-        self.gj_lines = []  # 国际
-        self.jlp_lines = []  # 纪录片
-        self.xq_lines = []  # 戏曲
-        self.js_lines = []  # 解说
-        self.newtv_lines = []  # NewTV
-        self.ihot_lines = []  # iHot
-        self.et_lines = []  # 儿童
-        self.zy_lines = []  # 综艺
-        self.mdd_lines = []  # 埋堆堆
-        self.yy_lines = []  # 音乐
-        self.game_lines = []  # 游戏
-        self.radio_lines = []  # 广播
-        self.zb_lines = []  # 直播中国
-        self.cw_lines = []  # 春晚
-        self.mtv_lines = []  # MTV
-        self.migu_lines = []  # 咪咕
-        
-        # 地方频道
-        self.sh_lines = []  # 上海
-        self.zj_lines = []  # 浙江
-        # ... 其他地方频道
-        
-        self.other_lines = []  # 其他频道
         
         self.removal_list = ["「IPV4」","「IPV6」","[ipv6]","[ipv4]","_电信", "电信","（HD）","[超清]","高清","超清", "-HD","(HK)","AKtv","@","IPV6","🎞️","🎦"," ","[BD]","[VGA]","[HD]","[SD]","(1080p)","(720p)","(480p)"]
 
@@ -264,6 +233,27 @@ class TVChannelProcessor:
         
         return '\n'.join(result)
 
+    def is_ys_channel(self, channel_name: str) -> bool:
+        """判断是否为央视频道"""
+        ys_keywords = ['CCTV', '央视', '中央']
+        return any(keyword in channel_name for keyword in ys_keywords)
+
+    def is_ws_channel(self, channel_name: str) -> bool:
+        """判断是否为卫视频道"""
+        ws_keywords = [
+            '卫视', '湖南', '浙江', '江苏', '北京', '东方', '广东', '深圳', 
+            '天津', '重庆', '山东', '湖北', '四川', '辽宁', '河南', '安徽',
+            '河北', '福建', '江西', '广西', '贵州', '黑龙江', '吉林', '山西',
+            '陕西', '云南', '海南', '甘肃', '宁夏', '青海', '西藏', '新疆',
+            '内蒙古', '凤凰', '翡翠'
+        ]
+        return any(keyword in channel_name for keyword in ws_keywords)
+
+    def is_newtv_channel(self, channel_name: str) -> bool:
+        """判断是否为NewTV频道"""
+        newtv_keywords = ['NewTV', 'New TV', 'NEWTV']
+        return any(keyword.upper() in channel_name.upper() for keyword in newtv_keywords)
+
     def categorize_channels(self):
         """将频道分类到对应的容器中"""
         for channel_name, url_list in self.channel_data.items():
@@ -273,39 +263,14 @@ class TVChannelProcessor:
             for response_time, url in url_list[:5]:
                 line = f"{channel_name},{url}"
                 
-                # 分类逻辑
-                if any(keyword in channel_name for keyword in ['CCTV', '央视']):
+                # 分类逻辑 - 只保留三个分类
+                if self.is_ys_channel(channel_name):
                     self.ys_lines.append(line)
-                elif any(keyword in channel_name for keyword in ['卫视', '湖南', '浙江', '江苏', '北京']):
+                elif self.is_ws_channel(channel_name):
                     self.ws_lines.append(line)
-                elif any(keyword in channel_name for keyword in ['体育', '足球', '篮球']):
-                    self.ty_lines.append(line)
-                elif any(keyword in channel_name for keyword in ['电影']):
-                    self.dy_lines.append(line)
-                elif any(keyword in channel_name for keyword in ['电视剧']):
-                    self.dsj_lines.append(line)
-                elif any(keyword in channel_name for keyword in ['香港', '澳门', '台湾', '翡翠', '明珠']):
-                    self.gat_lines.append(line)
-                elif any(keyword in channel_name for keyword in ['国际']):
-                    self.gj_lines.append(line)
-                elif any(keyword in channel_name for keyword in ['纪录片']):
-                    self.jlp_lines.append(line)
-                elif any(keyword in channel_name for keyword in ['NewTV']):
+                elif self.is_newtv_channel(channel_name):
                     self.newtv_lines.append(line)
-                elif any(keyword in channel_name for keyword in ['iHOT']):
-                    self.ihot_lines.append(line)
-                elif any(keyword in channel_name for keyword in ['儿童', '卡通']):
-                    self.et_lines.append(line)
-                elif any(keyword in channel_name for keyword in ['综艺']):
-                    self.zy_lines.append(line)
-                elif any(keyword in channel_name for keyword in ['音乐']):
-                    self.yy_lines.append(line)
-                elif any(keyword in channel_name for keyword in ['游戏']):
-                    self.game_lines.append(line)
-                elif any(keyword in channel_name for keyword in ['广播', '电台']):
-                    self.radio_lines.append(line)
-                else:
-                    self.other_lines.append(line)
+                # 其他频道直接忽略，不添加到任何分类
 
     def generate_output_files(self):
         """生成输出文件"""
@@ -319,24 +284,11 @@ class TVChannelProcessor:
         content_lines.append(formatted_time)
         content_lines.append("")
         
-        # 添加各个分类
+        # 添加三个分类
         categories = [
             ("央视频道,#genre#", self.ys_lines),
             ("卫视频道,#genre#", self.ws_lines),
-            ("体育频道,#genre#", self.ty_lines),
-            ("电影频道,#genre#", self.dy_lines),
-            ("电视剧频道,#genre#", self.dsj_lines),
-            ("港澳台频道,#genre#", self.gat_lines),
-            ("国际频道,#genre#", self.gj_lines),
-            ("纪录片频道,#genre#", self.jlp_lines),
-            ("NewTV,#genre#", self.newtv_lines),
-            ("iHOT,#genre#", self.ihot_lines),
-            ("儿童频道,#genre#", self.et_lines),
-            ("综艺频道,#genre#", self.zy_lines),
-            ("音乐频道,#genre#", self.yy_lines),
-            ("游戏频道,#genre#", self.game_lines),
-            ("广播频道,#genre#", self.radio_lines),
-            ("其他频道,#genre#", self.other_lines),
+            ("NewTV频道,#genre#", self.newtv_lines),
         ]
         
         for category_name, lines in categories:
@@ -350,6 +302,9 @@ class TVChannelProcessor:
             with open("live.txt", 'w', encoding='utf-8') as f:
                 f.write('\n'.join(content_lines))
             print("live.txt 生成成功")
+            print(f"央视频道数量: {len(self.ys_lines)}")
+            print(f"卫视频道数量: {len(self.ws_lines)}")
+            print(f"NewTV频道数量: {len(self.newtv_lines)}")
         except Exception as e:
             print(f"写入live.txt错误: {e}")
 
@@ -386,6 +341,8 @@ class TVChannelProcessor:
     def run(self):
         """主运行函数"""
         print("开始处理电视频道...")
+        print("只保留：央视频道、卫视频道、NewTV频道")
+        print("每个频道只保留响应时间最快的前5个源")
         
         # 加载黑名单
         blacklist_auto = self.read_blacklist_from_txt('assets/whitelist-blacklist/blacklist_auto.txt')
@@ -437,13 +394,15 @@ class TVChannelProcessor:
         minutes = int(total_seconds // 60)
         seconds = int(total_seconds % 60)
         
-        total_channels = sum(len(urls) for urls in self.channel_data.values())
+        total_channels = len(self.ys_lines) + len(self.ws_lines) + len(self.newtv_lines)
         
         print(f"\n=== 处理完成 ===")
         print(f"执行时间: {minutes}分{seconds}秒")
         print(f"黑名单数量: {len(self.combined_blacklist)}")
-        print(f"总频道数: {len(self.channel_data)}")
-        print(f"总直播源数: {total_channels}")
+        print(f"央视频道数: {len(self.ys_lines)}")
+        print(f"卫视频道数: {len(self.ws_lines)}")
+        print(f"NewTV频道数: {len(self.newtv_lines)}")
+        print(f"总频道数: {total_channels}")
         print(f"每个频道保留最快的前5个源")
 
 if __name__ == "__main__":
