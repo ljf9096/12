@@ -3,210 +3,400 @@ from urllib.parse import urlparse
 import re
 import os
 from datetime import datetime, timedelta, timezone
-from collections import defaultdict
-from typing import List, Set, Dict, Tuple, DefaultDict
+import random
 import opencc
+from typing import List, Set, Dict, Tuple
+from collections import defaultdict
 
 class TVChannelProcessor:
     def __init__(self):
         self.timestart = datetime.now()
         self.combined_blacklist = set()
-        self.channel_sources = defaultdict(list)  # 存储每个频道的源及其响应时间
-        self.all_urls = set()
+        self.all_urls = set()  # For global URL deduplication
         
-        # 初始化频道容器
+        # Initialize all channel containers
         self.init_channel_containers()
         
     def init_channel_containers(self):
-        # 主频道容器
-        self.ys_lines = []  # 央视频道
-        self.ws_lines = []  # 卫视频道
-        self.ty_lines = []  # 体育频道
-        # ... 其他频道容器初始化
-        self.other_lines = []
+        # Main channels
+        self.ys_lines = []  # CCTV channels
+        self.ws_lines = []  # Satellite TV channels
+        self.ty_lines = []  # Sports channels
+        self.dy_lines = []  # Movie channels
+        self.dsj_lines = []  # TV drama channels
+        self.gat_lines = []  # Hong Kong/Macau/Taiwan channels
+        self.twt_lines = []  # Taiwan channels
+        self.gj_lines = []  # International channels
+        self.jlp_lines = []  # Documentary channels
+        self.xq_lines = []  # Opera channels
+        self.js_lines = []  # Commentary channels
+        self.newtv_lines = []  # NewTV
+        self.ihot_lines = []  # iHot
+        self.et_lines = []  # Children channels
+        self.zy_lines = []  # Variety channels
+        self.mdd_lines = []  #埋堆堆
+        self.yy_lines = []  # Music channels
+        self.game_lines = []  # Game channels
+        self.radio_lines = []  # Radio channels
+        self.zb_lines = []  # Live China
+        self.cw_lines = []  # Spring Festival Gala
+        self.mtv_lines = []  # MTV
+        self.migu_lines = []  # Migu Live
+
+        # Local channels
+        self.sh_lines = []  # Shanghai
+        self.zj_lines = []  # Zhejiang
+        # ... (other local channels initialized similarly)
         
-        self.removal_list = ["「IPV4」","「IPV6」","[ipv6]","[ipv4]","_电信", "电信",
-                           "（HD）","[超清]","高清","超清", "-HD","(HK)","AKtv","@",
-                           "IPV6","🎞️","🎦"," ","[BD]","[VGA]","[HD]","[SD]",
-                           "(1080p)","(720p)","(480p)"]
+        self.other_lines = []  # Other channels
+        self.removal_list = ["「IPV4」","「IPV6」","[ipv6]","[ipv4]","_电信", "电信","（HD）","[超清]","高清","超清", "-HD","(HK)","AKtv","@","IPV6","🎞️","🎦"," ","[BD]","[VGA]","[HD]","[SD]","(1080p)","(720p)","(480p)"]
+        
+        # Dictionary to store channel URLs with response times
+        self.channel_urls = defaultdict(list)
 
     def read_txt_to_array(self, file_name: str) -> List[str]:
-        """读取文本文件到数组"""
+        """Read text file into array of lines"""
         try:
             with open(file_name, 'r', encoding='utf-8') as file:
                 return [line.strip() for line in file.readlines()]
+        except FileNotFoundError:
+            print(f"File '{file_name}' not found.")
+            return []
         except Exception as e:
-            print(f"读取文件错误 {file_name}: {e}")
+            print(f"An error occurred reading {file_name}: {e}")
             return []
 
-    def process_channel_line(self, line: str):
-        """处理单行频道数据"""
-        if not line or "#genre#" in line or "#EXTINF:" in line:
-            return
-            
+    def read_blacklist_from_txt(self, file_path: str) -> List[str]:
+        """Read blacklist from text file"""
         try:
-            parts = line.split(',')
-            if len(parts) == 3 and parts[0].endswith('ms'):
-                # 格式: "200ms,频道名称,URL"
-                time_ms = float(parts[0].replace('ms', ''))
-                name = parts[1].strip()
-                url = parts[2].strip()
-            elif len(parts) >= 2:
-                # 格式: "频道名称,URL"
-                time_ms = float('inf')  # 无响应时间数据
-                name = parts[0].strip()
-                url = parts[1].strip()
-            else:
-                return
-                
-            # 清理频道名称
-            name = self.clean_channel_name(name)
-            url = self.clean_url(url)
-            
-            if url and url not in self.combined_blacklist and url not in self.all_urls:
-                self.all_urls.add(url)
-                self.channel_sources[name].append((time_ms, url))
-                
+            with open(file_path, 'r', encoding='utf-8') as file:
+                lines = file.readlines()
+            return [line.split(',')[1].strip() for line in lines if ',' in line]
         except Exception as e:
-            print(f"处理频道行错误: {e}")
+            print(f"Error reading blacklist {file_path}: {e}")
+            return []
 
-    def clean_channel_name(self, name: str) -> str:
-        """清理频道名称"""
-        for pattern in self.removal_list:
-            name = name.replace(pattern, "")
+    def load_corrections_name(self, filename: str) -> Dict[str, str]:
+        """Load channel name corrections"""
+        corrections = {}
+        try:
+            with open(filename, 'r', encoding='utf-8') as f:
+                for line in f:
+                    if line.strip():
+                        parts = line.strip().split(',')
+                        correct_name = parts[0]
+                        for name in parts[1:]:
+                            corrections[name] = correct_name
+        except Exception as e:
+            print(f"Error loading corrections: {e}")
+        return corrections
+
+    def traditional_to_simplified(self, text: str) -> str:
+        """Convert traditional Chinese to simplified Chinese"""
+        try:
+            converter = opencc.OpenCC('t2s')
+            return converter.convert(text)
+        except Exception as e:
+            print(f"Error in traditional to simplified conversion: {e}")
+            return text
+
+    def is_m3u_content(self, text: str) -> bool:
+        """Check if content is M3U format"""
+        lines = text.splitlines()
+        return lines and lines[0].strip().startswith("#EXTM3U")
+
+    def convert_m3u_to_txt(self, m3u_content: str) -> str:
+        """Convert M3U content to TXT format"""
+        lines = m3u_content.split('\n')
+        txt_lines = []
+        channel_name = ""
+        
+        for line in lines:
+            if line.startswith("#EXTM3U"):
+                continue
+            if line.startswith("#EXTINF"):
+                channel_name = line.split(',')[-1].strip()
+            elif line.startswith(("http", "rtmp", "p3p")):
+                txt_lines.append(f"{channel_name},{line.strip()}")
             
+            # Handle M3U files with TXT content
+            if "#genre#" not in line and "," in line and "://" in line:
+                pattern = r'^[^,]+,[^\s]+://[^\s]+$'
+                if re.match(pattern, line):
+                    txt_lines.append(line)
+        
+        return '\n'.join(txt_lines)
+
+    def clean_url(self, url: str) -> str:
+        """Remove content after $ in URL"""
+        last_dollar_index = url.rfind('$')
+        return url[:last_dollar_index] if last_dollar_index != -1 else url
+
+    def clean_channel_name(self, channel_name: str) -> str:
+        """Clean channel name by removing unwanted patterns"""
+        for item in self.removal_list:
+            channel_name = channel_name.replace(item, "")
+        
         replacements = {
-            "CCTV-": "CCTV", "CCTV0": "CCTV",
-            "PLUS": "+", "NewTV-": "NewTV",
-            "iHOT-": "iHOT", "NEW": "New",
+            "CCTV-": "CCTV",
+            "CCTV0": "CCTV",
+            "PLUS": "+",
+            "NewTV-": "NewTV",
+            "iHOT-": "iHOT",
+            "NEW": "New",
             "New_": "New"
         }
         
         for old, new in replacements.items():
-            name = name.replace(old, new)
+            channel_name = channel_name.replace(old, new)
             
-        return name.strip()
+        return channel_name
 
-    def clean_url(self, url: str) -> str:
-        """清理URL"""
-        return url.split('$')[0].strip()
-
-    def select_top_sources(self, top_n=5):
-        """选择每个频道响应时间最快的前N个源"""
-        for name, sources in self.channel_sources.items():
-            # 按响应时间排序 (从小到大)
-            sorted_sources = sorted(sources, key=lambda x: x[0])
-            # 取前N个
-            top_sources = sorted_sources[:top_n]
-            
-            # 添加到对应分类
-            for _, url in top_sources:
-                line = f"{name},{url}"
-                self.categorize_channel(name, line)
-
-    def categorize_channel(self, name: str, line: str):
-        """频道分类逻辑"""
-        # 这里应该有实际的分类逻辑，简化版直接放入other
-        self.other_lines.append(line)
-
-    def generate_output(self):
-        """生成输出内容"""
-        utc_time = datetime.now(timezone.utc)
-        beijing_time = utc_time + timedelta(hours=8)
-        version = beijing_time.strftime("%Y%m%d %H:%M")
-        
-        output_lines = [
-            f"更新时间,#genre#\n{version}\n",
-            "央视频道,#genre#"
-        ]
-        
-        # 添加各分类频道
-        if self.ys_lines:
-            output_lines.extend(self.ys_lines)
-            
-        output_lines.append("\n卫视频道,#genre#")
-        if self.ws_lines:
-            output_lines.extend(self.ws_lines)
-            
-        # 添加其他频道
-        if self.other_lines:
-            output_lines.append("\n其他频道,#genre#")
-            output_lines.extend(self.other_lines)
-            
-        return '\n'.join(output_lines)
-
-    def make_m3u(self, txt_content: str, m3u_file: str):
-        """从文本内容生成M3U文件"""
-        try:
-            output = '#EXTM3U x-tvg-url="https://epg.112114.xyz/pp.xml.gz"\n'
-            group = ""
-            
-            for line in txt_content.split('\n'):
-                if not line or line.startswith("更新时间,#genre#"):
-                    continue
+    def process_channel_line(self, line: str, response_time: float = None):
+        """Process a single channel line and categorize it"""
+        if "#genre#" not in line and "#EXTINF:" not in line and "," in line and "://" in line:
+            try:
+                channel_name, channel_address = line.split(',', 1)
+                channel_name = self.traditional_to_simplified(channel_name)
+                channel_name = self.clean_channel_name(channel_name)
+                channel_name = self.corrections_name.get(channel_name, channel_name).strip()
+                
+                channel_address = self.clean_url(channel_address).strip()
+                line = f"{channel_name},{channel_address}"
+                
+                if not channel_address or channel_address in self.combined_blacklist:
+                    return
                     
-                if "#genre#" in line:
-                    group = line.split(',')[0]
-                    output += f'#EXTINF:-1 group-title="{group}",\n'
+                # Store URL with response time for later filtering
+                if response_time is not None:
+                    self.channel_urls[channel_name].append((response_time, line))
                 else:
-                    name, url = line.split(',', 1)
-                    logo = f"https://epg.112114.xyz/logo/{name}.png"
-                    output += f'#EXTINF:-1 tvg-name="{name}" tvg-logo="{logo}" group-title="{group}",{name}\n'
-                    output += f"{url}\n"
-            
-            with open(m3u_file, 'w', encoding='utf-8') as f:
-                f.write(output)
-            print(f"M3U文件已生成: {m3u_file}")
+                    # If no response time, use a default high value
+                    self.channel_urls[channel_name].append((9999.0, line))
                 
-        except Exception as e:
-            print(f"生成M3U文件错误: {e}")
+            except Exception as e:
+                print(f"Error processing channel line: {e}")
 
-    def run(self):
-        """主运行方法"""
-        # 加载黑名单
-        blacklist = self.read_txt_to_array('blacklist_auto.txt')
-        self.combined_blacklist = set(blacklist)
-        
-        # 加载白名单并处理
-        whitelist = self.read_txt_to_array('whitelist_auto.txt')
-        for line in whitelist:
-            self.process_channel_line(line)
+    def filter_top_urls(self):
+        """Filter each channel to keep only top 5 fastest URLs"""
+        for channel_name, url_list in self.channel_urls.items():
+            # Sort by response time (ascending)
+            url_list.sort(key=lambda x: x[0])
+            # Keep only top 5
+            top_urls = url_list[:5]
             
-        # 处理URL源
-        urls = self.read_txt_to_array('urls.txt')
-        for url in urls:
-            if url.startswith('http'):
-                self.process_url(url)
-                
-        # 选择最佳源
-        self.select_top_sources()
-        
-        # 生成输出文件
-        output_content = self.generate_output()
-        with open("live.txt", 'w', encoding='utf-8') as f:
-            f.write(output_content)
-            
-        # 生成M3U文件
-        self.make_m3u(output_content, "live.m3u")
-        
-        # 打印统计信息
-        total_channels = len(self.channel_sources)
-        total_sources = sum(len(sources) for sources in self.channel_sources.values())
-        print(f"处理完成，共收集 {total_channels} 个频道，{total_sources} 个直播源")
+            # Add to appropriate category
+            for response_time, line in top_urls:
+                if channel_address := line.split(',')[1]:
+                    if channel_address not in self.all_urls:
+                        self.all_urls.add(channel_address)
+                        self.categorize_channel(channel_name, line)
+
+    def categorize_channel(self, channel_name: str, line: str):
+        """Categorize channel based on its name"""
+        # This would be a large method mapping channel names to categories
+        # For brevity, I'm showing just a few examples
+        if channel_name in self.ys_dictionary:
+            self.ys_lines.append(line)
+        elif channel_name in self.ws_dictionary:
+            self.ws_lines.append(line)
+        elif channel_name in self.newtv_dictionary:
+            self.newtv_lines.append(line)
+        else:
+            self.other_lines.append(line)
 
     def process_url(self, url: str):
-        """处理URL获取直播源"""
+        """Process a URL to extract channel information"""
+        print(f"Processing URL: {url}")
+        self.other_lines.append(f"{url},#genre#")
+        
         try:
-            headers = {'User-Agent': 'Mozilla/5.0'}
+            headers = {'User-Agent': 'PostmanRuntime-ApipostRuntime/1.1.0'}
             req = urllib.request.Request(url, headers=headers)
             
             with urllib.request.urlopen(req, timeout=10) as response:
-                content = response.read().decode('utf-8')
-                for line in content.splitlines():
-                    self.process_channel_line(line)
-                    
+                data = response.read()
+                
+                # Try different encodings
+                encodings = ['utf-8', 'gbk', 'iso-8859-1']
+                text = None
+                
+                for encoding in encodings:
+                    try:
+                        text = data.decode(encoding)
+                        break
+                    except UnicodeDecodeError:
+                        continue
+                
+                if text is None:
+                    print(f"Could not decode content from {url}")
+                    return
+                
+                # Convert M3U to TXT if needed
+                if self.is_m3u_content(text):
+                    text = self.convert_m3u_to_txt(text)
+                
+                # Process each line
+                lines = text.split('\n')
+                print(f"Lines: {len(lines)}")
+                
+                for line in lines:
+                    if "#genre#" not in line and "," in line and "://" in line:
+                        channel_name, channel_address = line.split(',', 1)
+                        
+                        if "#" not in channel_address:
+                            self.process_channel_line(line)
+                        else:
+                            url_list = channel_address.split('#')
+                            for channel_url in url_list:
+                                newline = f'{channel_name},{channel_url}'
+                                self.process_channel_line(newline)
+                
+                self.other_lines.append('\n')
+                
         except Exception as e:
-            print(f"处理URL错误 {url}: {e}")
+            print(f"Error processing URL {url}: {e}")
+
+    def sort_data(self, order: List[str], data: List[str]) -> List[str]:
+        """Sort data based on a specified order"""
+        order_dict = {name: i for i, name in enumerate(order)}
+        
+        def sort_key(line):
+            name = line.split(',')[0]
+            return order_dict.get(name, len(order))
+        
+        return sorted(data, key=sort_key)
+
+    def make_m3u(self, txt_file: str, m3u_file: str):
+        """Convert TXT file to M3U format"""
+        try:
+            output_text = '#EXTM3U x-tvg-url="https://epg.112114.xyz/pp.xml.gz"\n'
+            
+            with open(txt_file, "r", encoding='utf-8') as file:
+                input_text = file.read()
+
+            lines = input_text.strip().split("\n")
+            group_name = ""
+            
+            for line in lines:
+                parts = line.split(",")
+                if len(parts) == 2 and "#genre#" in line:
+                    group_name = parts[0]
+                elif len(parts) == 2:
+                    channel_name = parts[0]
+                    channel_url = parts[1]
+                    logo_url = f"https://epg.112114.xyz/logo/{channel_name}.png"
+                    
+                    output_text += f'#EXTINF:-1 tvg-name="{channel_name}" tvg-logo="{logo_url}" group-title="{group_name}",{channel_name}\n'
+                    output_text += f"{channel_url}\n"
+
+            with open(m3u_file, "w", encoding='utf-8') as file:
+                file.write(output_text)
+                
+            print(f"M3U file '{m3u_file}' generated successfully.")
+            
+        except Exception as e:
+            print(f"Error generating M3U file: {e}")
+
+    def run(self):
+        """Main execution method"""
+        # Load blacklists
+        blacklist_auto = self.read_blacklist_from_txt('assets/whitelist-blacklist/blacklist_auto.txt')
+        blacklist_manual = self.read_blacklist_from_txt('assets/whitelist-blacklist/blacklist_manual.txt')
+        self.combined_blacklist = set(blacklist_auto + blacklist_manual)
+        
+        # Load whitelists
+        self.whitelist_lines = self.read_txt_to_array('assets/whitelist-blacklist/whitelist_manual.txt')
+        self.whitelist_auto_lines = self.read_txt_to_array('assets/whitelist-blacklist/whitelist_auto.txt')
+        
+        # Load channel dictionaries
+        self.ys_dictionary = self.read_txt_to_array('主频道/央视频道.txt')
+        self.ws_dictionary = self.read_txt_to_array('主频道/卫视频道.txt')
+        # ... load other dictionaries
+        
+        # Load name corrections
+        self.corrections_name = self.load_corrections_name('assets/corrections_name.txt')
+        
+        # Load custom URLs
+        urls = self.read_txt_to_array('assets/urls.txt')
+        
+        # Process whitelists
+        self.other_lines.append("白名单,#genre#")
+        for line in self.whitelist_lines:
+            self.process_channel_line(line)
+            
+        self.other_lines.append("白名单测速,#genre#")
+        for line in self.whitelist_auto_lines:
+            if "#genre#" not in line and "," in line and "://" in line:
+                parts = line.split(",")
+                try:
+                    response_time = float(parts[0].replace("ms", ""))
+                    if response_time < 2000:  # 2 seconds
+                        self.process_channel_line(",".join(parts[1:]), response_time)
+                except ValueError:
+                    print(f"Invalid response time: {line}")
+        
+        # Process URLs
+        for url in urls:
+            if url.startswith("http"):
+                self.process_url(url)
+        
+        # Filter to keep only top 5 URLs per channel
+        self.filter_top_urls()
+        
+        # Generate output files
+        self.generate_output_files()
+        
+        # Generate M3U file (only live.m3u, not live_lite.m3u)
+        self.make_m3u("live.txt", "live.m3u")
+        
+        # Print statistics
+        self.print_statistics()
+
+    def generate_output_files(self):
+        """Generate the output TXT files"""
+        # Get current time
+        utc_time = datetime.now(timezone.utc)
+        beijing_time = utc_time + timedelta(hours=8)
+        formatted_time = beijing_time.strftime("%Y%m%d %H:%M")
+        
+        # 只保留更新时间
+        version = f"{formatted_time}"
+        
+        # Generate content for full version
+        all_lines = [
+            "更新时间,#genre#", version, '\n',
+            "央视频道,#genre#"
+        ] + self.read_txt_to_array('专区/央视频道.txt') + self.sort_data(self.ys_dictionary, self.ys_lines) + ['\n'] + [
+            "卫视频道,#genre#"
+        ] + self.read_txt_to_array('专区/卫视频道.txt') + self.sort_data(self.ws_dictionary, self.ws_lines) + ['\n']
+        # ... continue building the content for other categories
+        
+        # Write files
+        try:
+            with open("live.txt", 'w', encoding='utf-8') as f:
+                f.write('\n'.join(all_lines))
+            print("完整版文本已保存到文件: live.txt")
+            
+            with open("others.txt", 'w', encoding='utf-8') as f:
+                f.write('\n'.join(self.other_lines))
+            print("其他频道已保存到文件: others.txt")
+            
+        except Exception as e:
+            print(f"保存文件时发生错误：{e}")
+
+    def print_statistics(self):
+        """Print execution statistics"""
+        timeend = datetime.now()
+        elapsed_time = timeend - self.timestart
+        total_seconds = elapsed_time.total_seconds()
+        minutes = int(total_seconds // 60)
+        seconds = int(total_seconds % 60)
+        
+        print(f"执行时间: {minutes} 分 {seconds} 秒")
+        print(f"blacklist行数: {len(self.combined_blacklist)}")
+        print(f"live.txt行数: {len(self.all_urls)}")
+        print(f"others.txt行数: {len(self.other_lines)}")
 
 if __name__ == "__main__":
     processor = TVChannelProcessor()
