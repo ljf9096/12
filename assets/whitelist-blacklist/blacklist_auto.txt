@@ -1,5 +1,5 @@
 更新时间,#genre#
-20250924 15:53,url
+20250924 15:57,url
 
 
 blacklist,#genre#
@@ -17,6 +17,7 @@ CCTV10,http://112.27.235.94:8000/hls/11/index.m3u8#http://iptv.huuc.edu.cn/hls/c
 CCTV10,https://zby.130519.xyz/PLTV/11/224/3221225743/index.m3u8
 CCTV11, https://migu.188766.xyz/?migutoken=30237c6ce8f278cb7f0671e20fddbbdb&id=CCTV11&type=yy
 CCTV12, https://migu.188766.xyz/?migutoken=baa0dc76bdba39e6597bb20d33abb5cd&id=CCTV12&type=yy
+CCTV12,http://222.169.85.8:9901/tsfile/live/0012_1.m3u8?key=txiptv
 CCTV12,http://223.167.230.34:4022/rtp/239.45.3.10:5140#http://125.42.150.99:9901/tsfile/live/1011_1.m3u8?key=txiptv&playlive=1&authid=0#http://125.125.233.219:9901/tsfile/live/0012_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.235.140:9901/tsfile/live/0012_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.234.1:9901/tsfile/live/0012_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.235.67:9901/tsfile/live/0012_1.m3u8?key=txiptv&playlive=1&authid=0#http://183.186.88.35:8899/tsfile/live/0012_1.m3u8?key=txiptv&playlive=1&authid=0#http://223.167.245.215:8001/rtp/239.45.3.10:5140
 CCTV12,https://zby.130519.xyz/PLTV/11/224/3221226103/index.m3u8
 CCTV13, https://migu.188766.xyz/?migutoken=7ad9fa5a8ad414bac6fca9c8fb836d9c&id=CCTV13&type=yy
@@ -24,6 +25,7 @@ CCTV13,https://event.pull.hebtv.com/jishi/cp1.m3u8#http://ali-m-l.cztv.com/chann
 CCTV13,https://zby.130519.xyz/PLTV/11/224/3221226128/index.m3u8
 CCTV14, https://migu.188766.xyz/?migutoken=89c17816832bd819e4622fb195bde1a4&id=CCTV14&type=yy
 CCTV14,http://171.15.18.199:8180/TV00000000000000000014@HHZT
+CCTV14,http://222.169.85.8:9901/tsfile/live/0014_1.m3u8?key=txiptv
 CCTV14,http://223.167.230.34:4022/rtp/239.45.3.23:5140#http://125.125.233.219:9901/tsfile/live/0014_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.235.140:9901/tsfile/live/0014_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.234.1:9901/tsfile/live/0014_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.235.67:9901/tsfile/live/0014_1.m3u8?key=txiptv&playlive=1&authid=0#http://183.186.88.35:8899/tsfile/live/0014_1.m3u8?key=txiptv&playlive=1&authid=0#http://223.167.245.215:8001/rtp/239.45.3.23:5140
 CCTV14,https://event.pull.hebtv.com/jishi/cp2.m3u8#http://112.27.235.94:8000/hls/15/index.m3u8#http://iptv.huuc.edu.cn/hls/cctv14hd.m3u8
 CCTV14,https://event.pull.hebtv.com/jishi/cp2.m3u8#rtsp://103.251.96.71/PLTV/88888888/224/3221225783/10000100000000060000000000726027_0.smil?icpid=SSPID&amp;accounttype=1&amp;limitflux=-1&amp;limitdur=-1&amp;accountinfo=:20240213104135
@@ -32,6 +34,7 @@ CCTV15, https://migu.188766.xyz/?migutoken=c90df3331d804baa9ee4a129ca6dd956&id=C
 CCTV16, https://migu.188766.xyz/?migutoken=b917ae978d0aef40e243c67a4b8d628f&id=16&type=sz
 CCTV17, https://migu.188766.xyz/?migutoken=422413d1cb7a82154748521ec5f831f1&id=CCTV17&type=yy
 CCTV2, https://migu.188766.xyz/?migutoken=d1f73cae2e35e46a5ac50da89de587d0&id=CCTV2&type=yy
+CCTV2,http://111.227.196.164:9901/tsfile/live/faacts/0002_1.m3u8
 CCTV3, https://migu.188766.xyz/?migutoken=fd36acf14ace74c9d85ecec95f3010f1&id=CCTV3&type=yy
 CCTV3,http://223.167.230.34:4022/rtp/239.45.1.68:5140#http://223.167.245.215:8001/rtp/239.45.1.68:5140#http://125.125.233.219:9901/tsfile/live/0003_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.235.67:9901/tsfile/live/0003_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.235.140:9901/tsfile/live/0003_1.m3u8?key=txiptv&playlive=1&authid=0#http://183.186.88.35:8899/tsfile/live/0003_1.m3u8?key=txiptv&playlive=1&authid=0
 CCTV3,https://zby.130519.xyz/PLTV/11/224/3221225766/index.m3u8
@@ -45,6 +48,7 @@ CCTV6, https://migu.188766.xyz/?migutoken=9c53fe57eae1a93ddb15bc0fdd8552b7&id=CC
 CCTV6,http://zzssw01.55555.io:9901/tsfile/live/0006_1.m3u8#http://61.156.228.12:8154/tsfile/live/0006_1.m3u8?key=txiptv&playlive=1&authid=0
 CCTV7, https://migu.188766.xyz/?migutoken=ae9c3ea4be29d2b8b202d234468ae599&id=CCTV7&type=yy
 CCTV7,http://223.167.230.34:4022/rtp/239.45.3.56:5140#http://125.42.150.99:9901/tsfile/live/1007_1.m3u8?key=txiptv&playlive=1&authid=0#http://125.125.233.219:9901/tsfile/live/0007_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.235.67:9901/tsfile/live/0007_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.234.1:9901/tsfile/live/0007_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.235.140:9901/tsfile/live/0007_1.m3u8?key=txiptv&playlive=1&authid=0#http://183.186.88.35:8899/tsfile/live/0007_1.m3u8?key=txiptv&playlive=1&authid=0#http://223.167.245.215:8001/rtp/239.45.3.56:5140#http://8.138.7.223/tv/cctv7.m3u8
+CCTV7,http://60.29.124.66:6080/hls/18/index.m3u8
 CCTV8, https://migu.188766.xyz/?migutoken=9fdc46c5bb7ee400557d588f65cfe3d4&id=CCTV8&type=yy
 CCTV8,http://223.167.230.34:4022/rtp/239.45.1.71:5140#http://125.125.233.219:9901/tsfile/live/0008_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.234.1:9901/tsfile/live/0008_1.m3u8?key=txiptv&playlive=1&authid=0#http://183.186.88.35:8899/tsfile/live/0008_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.235.67:9901/tsfile/live/0008_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.235.140:9901/tsfile/live/0008_1.m3u8?key=txiptv&playlive=1&authid=0#http://223.167.245.215:8001/rtp/239.45.1.71:5140
 CCTV8,https://zby.130519.xyz/PLTV/11/224/3221225736/index.m3u8
@@ -56,7 +60,6 @@ CETV4,http://223.167.230.34:4022/rtp/239.45.1.50:5140#http://223.167.245.215:800
 CHC动作电影, https://migu.188766.xyz/?migutoken=97700955533c52f32566eb1e125417e3&id=chcdz_hd&type=sz
 CHC家庭影院, https://migu.188766.xyz/?migutoken=086873730490f7733b4e55588c24706c&id=chcjt_hd&type=sz
 CHC影迷电影, https://migu.188766.xyz/?migutoken=b4ad87d907e6cf614df7ddd9e0f6a998&id=CHC%E5%BD%B1%E8%BF%B7%E7%94%B5%E5%BD%B1&type=yy
-ESPN,http://41.205.93.154/ESPN/index.m3u8
 TVB明珠台,http://php.jdshipin.com/TVOD/iptv.php?id=mzt2
 TVB明珠台,http://php.jdshipin.com:8880/smt.php?id=pearl_twn
 TVB星河, https://migu.188766.xyz/?migutoken=67d1d10a0e0668cbfa0f5b77605df08b&id=Xinhe&type=dy
@@ -79,7 +82,6 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 ▶️哪吒1魔童降世,https://vip.ffzy-play7.com/20221111/3098_4ec0b2e9/index.m3u8
 ▶️我不是药神,https://vip.ffzy-play1.com/20221018/478_c3afed66/index.m3u8
 ▶️无间道1,https://vip.ffzy-play6.com/20221017/13_ddfc1740/index.m3u8
-▶️无间道2,https://vip.lzcdn2.com/20220323/300_8be28e1c/index.m3u8
 ▶️无间道3：终极无间,https://vip.ffzy-play2.com/20221127/1567_f1965b4b/index.m3u8
 ▶️英雄本色1,https://vip.ffzy-play7.com/20221115/4617_be0491ea/index.m3u8
 ▶️英雄本色2,https://vip.ffzy-play7.com/20221115/4807_eeca808f/index.m3u8
@@ -89,8 +91,8 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 一步之遥,https://vip.ffzy-play2.com/20221122/1201_e24fce85/index.m3u8
 一眉道人,https://vip.ffzy-play7.com/20221115/4803_1731be32/index.m3u8
 七小福,https://vip.ffzy-play6.com/20221117/7398_2ddb4dac/index.m3u8
-三国演义,http://cfss.cc/cdn/hy/11602081.m3u8
 三德和尚与舂米六,https://vip.ffzy-play6.com/20221128/9099_38718b59/index.m3u8
+三沙卫视,http://nn.7x9d.cn/地方台8563/海南.php?id=ssws&u8??key=txiptv
 上海乐游频道,http://223.167.230.34:4022/rtp/239.45.3.135:5140#http://223.167.245.215:8001/rtp/239.45.3.135:5140
 上海动漫秀场,http://223.167.230.34:4022/rtp/239.45.3.134:5140#http://223.167.245.215:8001/rtp/239.45.3.134:5140
 上海十三太保,https://vip.ffzy-play.com/20221018/2001_3ef7be69/index.m3u8
@@ -103,7 +105,6 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 上海都市, https://migu.188766.xyz/?migutoken=58705cb9293a0b37531f8590b41ad692&id=ds&type=sz
 上海都市剧场,http://223.167.230.34:4022/rtp/239.45.3.136:5140#http://223.167.245.215:8001/rtp/239.45.3.136:5140
 上海魔都眼, https://migu.188766.xyz/?migutoken=4d52fac1b846b55cf5b0592790731d56&id=mdy&type=sz
-不二神探,https://cdn2.yzzy-tv-cdn.com/20220330/4069_8714f6bb/index.m3u8
 与龙共舞,https://vip.ffzy-play6.com/20221207/10859_1b02d27c/index.m3u8
 东南卫视, https://migu.188766.xyz/?migutoken=d8d8c46c6414fa4bea1ce0ec1dd066cd&id=dnws_hd&type=sz
 东南卫视,http://223.167.230.34:4022/rtp/239.45.1.121:5140#http://125.42.150.99:9901/tsfile/live/0126_1.m3u8?key=txiptv&playlive=1&authid=0#http://125.125.233.219:9901/tsfile/live/0137_1.m3u8?key=txiptv&playlive=1&authid=0#http://223.167.245.215:8001/rtp/239.45.1.121:5140#http://183.186.88.35:8899/tsfile/live/0137_1.m3u8?key=txiptv&playlive=1&authid=0#http://36.32.174.67:60080/newlive/live/hls/33/live.m3u8
@@ -126,6 +127,8 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 乐游, https://migu.188766.xyz/?migutoken=73481b23bf2ea22095a2bb414976cc65&id=ly&type=sz
 云南卫视, https://migu.188766.xyz/?migutoken=784a741d1c543de94e411d39b4dfe9a4&id=ynws&type=sz
 云南卫视,http://221.2.148.205:8154/tsfile/live/0119_1.m3u8?key=txiptv&playlive=1&authid=0
+云南卫视,http://222.169.85.8:9901/tsfile/live/0119_1.m3u8
+云南卫视,http://222.169.85.8:9901/tsfile/live/0119_1.m3u8?key=txiptv
 云南卫视,https://zby.130519.xyz/PLTV/11/224/3221226151/index.m3u8
 五亿探长雷洛传1:雷老虎,https://vip.ffzy-online.com/20221015/672_cd3f2629/index.m3u8
 五亿探长雷洛传2:父子情仇,https://vip.ffzy-online.com/20221015/676_0dc45896/index.m3u8
@@ -147,6 +150,8 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 兵团卫视,http://223.167.230.34:4022/rtp/239.45.1.117:5140#http://8.138.7.223/tv/btws.m3u8#http://223.167.245.215:8001/rtp/239.45.1.117:5140
 内蒙古农牧, http://play1-qk.nmtv.cn:80/live/1686561299036179.m3u8
 内蒙古卫视, https://migu.188766.xyz/?migutoken=861acf3ff0f0e7dbe480529ef5165d22&id=nmws_hd&type=yy
+内蒙古卫视,http://123.130.84.106:8154/tsfile/live/0109_1.m3u8
+内蒙古卫视,http://123.130.84.106:8154/tsfile/live/0109_1.m3u8?key=txiptv&playlive=1&authid=0
 内蒙古卫视,http://221.2.148.205:8154/tsfile/live/0109_1.m3u8
 内蒙古卫视,http://221.2.148.205:8154/tsfile/live/0109_1.m3u8?key=txiptv&playlive=1&authid=0
 内蒙古卫视,http://223.167.230.34:4022/rtp/239.45.1.238:5140#http://223.167.245.215:8001/rtp/239.45.1.238:5140
@@ -156,13 +161,11 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 内蒙古新闻综合, http://play1-qk.nmtv.cn/live/1686560423879174.m3u8
 内蒙古经济生活, http://play1-qk.nmtv.cn/live/1686562470947181.m3u8
 内蒙古蒙语文化, http://play1-qk.nmtv.cn/live/1686561065304370.m3u8
-冒险王,https://cdn4.yzzy-tv-cdn.com/20220608/17622_c083f16b/index.m3u8
 决战紫禁之巅,https://vip.ffzy-play7.com/20230413/22211_bfb8d6b2/index.m3u8
 凤凰中文, https://migu.188766.xyz/?migutoken=6b27073858b60bfe20c30292371f2df9&id=fhzw&pp=1
 凤凰资讯, https://migu.188766.xyz/?migutoken=b1eadcfa67a00f48a041960933d7de75&id=fhzx&pp=1
 凤凰香港, https://migu.188766.xyz/?migutoken=9ab4956a2bfb625af3c530daa0874378&id=fhhk&pp=1
 刀剑笑,https://vip.ffzy-play7.com/20221112/3808_6690be34/index.m3u8
-刁手怪招,https://cdn7.yzzy-tv-cdn.com/20220625/561_337bba55/index.m3u8
 功夫瑜伽,https://vip.ffzy-play2.com/20221124/1291_468b2efb/index.m3u8
 勇敢的心,http://cfss.cc/cdn/hy/11602037.m3u8
 北京体育休闲, https://migu.188766.xyz/?migutoken=dd21fa4aba54c0fd7616473eaf29f03c&id=%E5%8C%97%E4%BA%AC%E4%BD%93%E8%82%B2%E4%BC%91%E9%97%B2&type=yy
@@ -276,7 +279,6 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 嘉定频道,http://223.167.230.34:4022/rtp/239.45.3.185:5140#http://223.167.245.215:8001/rtp/239.45.3.185:5140
 嘻游记,https://vip.ffzy-play6.com/20221022/1023_fae8e09f/index.m3u8
 四川卫视, https://migu.188766.xyz/?migutoken=1404384eec5924775f5fb98ddbb95390&id=scws&type=sz
-四川卫视,http://218.17.33.178:53290/tsfile/live/0123_1.m3u8?key=txiptv
 四川卫视,http://223.167.230.34:4022/rtp/239.45.1.83:5140#http://125.125.233.219:9901/tsfile/live/0123_1.m3u8?key=txiptv&playlive=1&authid=0#http://183.186.88.35:8899/tsfile/live/0123_1.m3u8?key=txiptv&playlive=1&authid=0#http://223.167.245.215:8001/rtp/239.45.1.83:5140
 四海钓鱼, https://migu.188766.xyz/?migutoken=3fa3733555c3f45764d6894cf529e538&id=%E5%9B%9B%E6%B5%B7%E9%92%93%E9%B1%BC&type=yy
 国学频道,rtmp://rtmp.tv.stream3.hndt.com/tv/647f9277018410008cf925e200000000?wsSecret=9a23316ee66e918684e097f&wsSecret=044279d4a1a5be53c3003a83cb643959&wsTime=1758708019
@@ -288,8 +290,6 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 大湾区卫视, https://migu.188766.xyz/?migutoken=37e290346473a64cd3beec5ad43fe777&id=%E5%A4%A7%E6%B9%BE%E5%8C%BA%E5%8D%AB%E8%A7%86&type=yy
 大湾区卫视,https://fn.130519.xyz/gddwq/index.m3u8?servicetype=1&&IASHttpSessionId=RR778520250111113355399717&ispcode=1108
 大腕,https://vip.ffzy-play6.com/20221019/66_5c1f5d09/index.m3u8
-大话西游之大圣娶亲,http://p.bvvvvvvvvv1f.com/video/dahuaxiyouzhidashengquqin/HD国语/index.m3u8
-大话西游之月光宝盒,http://p.bvvvvvvvvv1f.com/video/dahuaxiyouzhiyueguangbaohe/HD国语/index.m3u8
 天下无贼,https://vip.ffzy-play6.com/20221018/39_d0036fb2/index.m3u8
 天与地,https://vip.ffzy-play6.com/20221112/6144_016eb00a/index.m3u8
 天地玄门,https://vip.ffzy-play6.com/20221112/6127_d615f342/index.m3u8
@@ -315,19 +315,20 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 宁夏卫视,https://zby.130519.xyz/PLTV/11/224/3221226092/index.m3u8
 安徽卫视, https://migu.188766.xyz/?migutoken=28437d34105e3a8cbf3dec87ab13830f&id=ahws&type=sz
 安徽卫视,https://zby.130519.xyz/PLTV/11/224/3221225739/index.m3u8
+安阳新闻综合,http://221.13.235.67:9901/tsfile/live/1014_1.m3u8?key=txiptv&playlive=1&authid=0
 宜兴新闻综合, https://migu.188766.xyz/?migutoken=4873bfdd2ea2ce5965c7ca45f73bdbe0&id=%E5%AE%9C%E5%85%B4%E6%96%B0%E9%97%BB%E7%BB%BC%E5%90%88&type=yy
 宝贝计划,https://vip.ffzy-play2.com/20221021/73_d5c05ae2/index.m3u8
 宿迁新闻综合, https://migu.188766.xyz/?migutoken=b96e734b9e203d8e5dee99fb7796a46f&id=%E5%AE%BF%E8%BF%81%E6%96%B0%E9%97%BB%E7%BB%BC%E5%90%88&type=yy
 密宗威龙,https://vip.ffzy-play7.com/20221112/3607_e49d9e93/index.m3u8
 富贵兵团,https://vip.ffzy-play7.com/20221209/9048_80e2a1cb/index.m3u8
 富贵列车,https://vip.ffzy-play7.com/20221206/8232_7462fce8/index.m3u8
-少林寺,https://cdn4.yzzy-tv-cdn.com/20220606/17324_133ab69b/index.m3u8
 少林木人巷,https://vip.ffzy-play6.com/20221128/9115_ff8a121e/index.m3u8
 少林英雄,https://vip.ffzy-play6.com/20221206/10385_35db0937/index.m3u8
 山东卫视, https://migu.188766.xyz/?migutoken=26a9195522a9f7bed570c81027b70135&id=sdws_hd&type=sz
 山东卫视,http://223.167.230.34:4022/rtp/239.45.3.238:5140#http://223.167.245.215:8001/rtp/239.45.3.238:5140#http://125.125.233.219:9901/tsfile/live/0131_1.m3u8?key=txiptv&playlive=1&authid=0#http://183.186.88.35:8899/tsfile/live/0131_1.m3u8?key=txiptv&playlive=1&authid=0
 山西卫视, https://migu.188766.xyz/?migutoken=01e7357ef79f0a781278f2c29a97dd68&id=sxws&type=sz
 山西卫视,http://221.2.148.205:8154/tsfile/live/0118_1.m3u8?key=txiptv&playlive=1&authid=0
+山西卫视,http://222.169.85.8:9901/tsfile/live/0118_1.m3u8
 师兄撞鬼,https://vip.ffzy-play6.com/20221207/10610_200b5bd4/index.m3u8
 师弟出马,https://vip.ffzy-play7.com/20221115/4764_aba20ecc/index.m3u8
 幕后玩家,https://vip.ffzy-play.com/20221018/1847_f9676687/index.m3u8
@@ -349,7 +350,6 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 我是谁,https://vip.ffzy-play6.com/20221022/881_da82c5bb/index.m3u8
 战神传说,https://vip.ffzy-play7.com/20221129/7734_53205031/index.m3u8
 手机,https://vip.ffzy-play6.com/20221019/107_6107b581/index.m3u8
-投名状,https://cdn13.yzzy-tv-cdn.com/20230128/9592_3d21d729/index.m3u8
 抗战经典影片, https://migu.188766.xyz/?migutoken=31cdac1e1707e6df5632227cdbe1682b&id=%E6%8A%97%E6%88%98%E7%BB%8F%E5%85%B8%E5%BD%B1%E7%89%87&type=yy
 拆弹专家1,https://vip.ffzy-online.com/20221015/719_80ff87c2/index.m3u8
 拆弹专家2,https://vip.ffzy-online.com/20221015/722_e32c42bc/index.m3u8
@@ -362,10 +362,11 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 新宿事件,https://vip.ffzy-play7.com/20230314/18148_991eeb8a/index.m3u8
 新片放映厅, https://migu.188766.xyz/?migutoken=023b2b477c844c950de56e880ae48152&id=%E6%96%B0%E7%89%87%E6%94%BE%E6%98%A0%E5%8E%85&type=yy
 新疆卫视, https://migu.188766.xyz/?migutoken=f754f5150f2d4710f11c492dff939ca2&id=xjws_hd&type=sz
+新疆卫视,http://222.169.85.8:9901/tsfile/live/0110_1.m3u8?key=txiptv
+新疆卫视,http://222.169.85.8:9901/tsfile/live/0110_1.m3u8?key=txiptv&playlive=1&authid=0
 新疆卫视,http://36.32.174.67:60080/newlive/live/hls/47/live.m3u8#http://223.167.245.215:8001/rtp/239.45.1.116:5140#http://223.167.230.34:4022/rtp/239.45.1.116:5140
 新警察故事,https://vip.ffzy-play6.com/20221017/15_7bd9a94d/index.m3u8
 新闻综合,http://223.167.230.34:4022/rtp/239.45.3.209:5140#http://223.167.245.215:8001/rtp/239.45.3.209:5140
-方世玉,https://cdn4.yzzy-tv-cdn.com/20220606/17350_39c4425b/index.m3u8
 方世玉续集,https://vip.ffzy-play6.com/20221129/9315_1d7ec0af/index.m3u8
 无人区,https://vip.ffzy-play6.com/20221019/203_ce8ad9b0/index.m3u8
 无双,https://vip.ffzy-play6.com/20221108/5250_e3bbb4e4/index.m3u8
@@ -383,10 +384,8 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 最强综艺趴, https://migu.188766.xyz/?migutoken=4de624400c566e2d0df56082084c685b&id=%E6%9C%80%E5%BC%BA%E7%BB%BC%E8%89%BA%E8%B6%B4&type=yy
 有话好好说,https://vip.ffzy-play7.com/20221112/3406_98dc6f14/index.m3u8
 未来警察,https://vip.ffzy-play6.com/20221022/1000_fa615f2b/index.m3u8
-杀手之王,https://cdn10.yzzy-tv-cdn.com/20221023/2307_200a0670/index.m3u8
 杀手的童话,https://vip.ffzy-play7.com/20221112/3690_803bfb83/index.m3u8
 杂家小子,https://vip.ffzy-play6.com/20221128/9261_f18e5614/index.m3u8
-李连杰,http://cfss.cc/cdn/hy/11342390.m3u8
 林世荣,https://vip.ffzy-play7.com/20221209/9096_70ae66c7/index.m3u8
 江湖情,https://vip.ffzy-play7.com/20221115/4682_5ffb4872/index.m3u8
 江湖龙虎斗,https://vip.ffzy-play7.com/20221115/4681_38b34b56/index.m3u8
@@ -421,6 +420,7 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 河南移动戏曲, https://migu.188766.xyz/?migutoken=3e912e213842f651519f6b01141a93b1&id=%E7%A7%BB%E5%8A%A8%E6%88%8F%E6%9B%B2%E9%A2%91%E9%81%93&type=yy
 河南象视界, https://migu.188766.xyz/?migutoken=ef3ee87d74ce2e12c59a5075b9a0367c&id=%E8%B1%A1%E8%A7%86%E7%95%8C&type=yy
 河南都市, https://migu.188766.xyz/?migutoken=2b4cb73285a249f9cf84d965b3c35be5&id=%E9%83%BD%E5%B8%82%E9%A2%91%E9%81%93&type=yy
+河南都市,http://221.13.235.140:9901/tsfile/live/1007_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.234.1:9901/tsfile/live/1007_1.m3u8?key=txiptv&playlive=1&authid=0#http://221.13.235.67:9901/tsfile/live/1007_1.m3u8?key=txiptv&playlive=1&authid=0
 法内情,https://vip.ffzy-play6.com/20221128/8900_ee5eabf3/index.m3u8
 泰州新闻综合, https://migu.188766.xyz/?migutoken=2b24eb9011759b7d63dee795f9b28861&id=%E6%B3%B0%E5%B7%9E%E6%96%B0%E9%97%BB%E7%BB%BC%E5%90%88&type=yy
 洪熙官,https://vip.ffzy-play7.com/20221223/9381_0fb84a1d/index.m3u8
@@ -442,6 +442,7 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 游戏风云,https://zby.130519.xyz/PLTV/11/224/3221226117/index.m3u8
 游戏风云,https://zby.130519.xyz/PLTV/11/224/3221226140/index.m3u8
 湖北卫视, https://migu.188766.xyz/?migutoken=b63c9ff4f443091225216f50bcf76994&id=%E6%B9%96%E5%8C%97%E5%8D%AB%E8%A7%86&type=yy
+湖北卫视,http://222.169.85.8:9901/tsfile/live/0132_1.m3u8
 湖北卫视,http://kbtv.zkbhj.com/liveRedirect/hotel.php?p=sdjn&id=42#http://222.169.85.8:9901/tsfile/live/0132_1.m3u8#http://112.27.235.94:8000/hls/41/index.m3u8#http://218.17.33.178:53290/tsfile/live/0132_1.m3u8?key=txiptv#http://iptv.huuc.edu.cn/hls/hbhd.m3u8
 湖北卫视,https://zby.130519.xyz/PLTV/11/224/3221225729/index.m3u8
 湖南卫视, https://migu.188766.xyz/?migutoken=397384cdeddb727f38ae5f90012cd4f3&id=hunws&type=sz
@@ -460,6 +461,7 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 特警新人类,https://vip.ffzy-play6.com/20221112/6113_c01821f3/index.m3u8
 狄仁杰之通天帝国,https://vip.ffzy-play2.com/20221021/129_ed646884/index.m3u8
 狱中龙,https://vip.ffzy-play.com/20221015/999_d5886cd0/index.m3u8
+猫和老鼠,http://cfss.cc/cdn/hy/11352879.m3u8
 玻璃樽,https://vip.ffzy-play7.com/20221112/3750_97a1bebc/index.m3u8
 甘肃卫视, https://migu.188766.xyz/?migutoken=dd0ea82b89fd49480340954f041f6d8d&id=gsws&type=sz
 甘肃卫视,https://zby.130519.xyz/PLTV/11/224/3221226090/index.m3u8
@@ -488,7 +490,6 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 科幻解说轮播,http://lxajh.top/tv/douyu.php?id=9338839
 秦颂,https://vip.ffzy-play7.com/20221112/3653_ad708d24/index.m3u8
 笑傲江湖1,https://vip.ffzy-play7.com/20221129/7696_58fbd289/index.m3u8
-笑傲江湖2:东方不败,https://cdn2.yzzy-tv-cdn.com/20220331/4843_724c1ac5/index.m3u8
 笑拳怪招,https://vip.ffzy-play6.com/20221128/9213_05050bb8/index.m3u8
 第一财经,http://223.167.230.34:4022/rtp/239.45.3.211:5140#http://223.167.245.215:8001/rtp/239.45.3.211:5140
 精装追女仔,https://vip.ffzy-play7.com/20221115/4686_d56a5b6c/index.m3u8
@@ -510,7 +511,6 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 至尊计状元才,https://vip.ffzy-play7.com/20221112/3440_9d089764/index.m3u8
 至臻视界4K, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221225687/1.m3u8
 花旗少林,https://vip.ffzy-play6.com/20221112/6363_411e98e2/index.m3u8
-花木兰,https://cdn2.yzzy-tv-cdn.com/20220405/7667_13f7046c/index.m3u8
 苏州4K, https://tylive.kan0512.com/norecord/csztv4k_4k.m3u8
 英雄好汉,https://vip.ffzy-play.com/20221015/981_2ca5b5f9/index.m3u8
 莲花卫视,http://live-hls.macaulotustv.com/lotustv/macaulotustv.m3u8#https://fenghuang.tv12.xyz/187.m3u8
@@ -547,8 +547,8 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 辣手神探,https://vip.ffzy-play7.com/20221112/3526_ba428b29/index.m3u8
 辽宁卫视, https://migu.188766.xyz/?migutoken=f16921c6d3b3f71557256f0a27852368&id=lnws&type=sz
 辽宁卫视,http://221.2.148.205:8154/tsfile/live/0121_1.m3u8?key=txiptv&playlive=1&authid=0
+辽宁卫视,http://222.169.85.8:9901/tsfile/live/0121_1.m3u8?key=txiptv#http://112.27.235.94:8000/hls/47/index.m3u8#http://iptv.huuc.edu.cn/hls/lnhd.m3u8
 辽宁卫视,http://223.167.230.34:4022/rtp/239.45.1.123:5140#http://125.125.233.219:9901/tsfile/live/0121_1.m3u8?key=txiptv&playlive=1&authid=0#http://223.167.245.215:8001/rtp/239.45.1.123:5140
-辽宁卫视,http://223.241.247.214:9901/tsfile/live/0121_1.m3u8?key=txiptv&playlive=1&authid=0
 过年,https://vip.ffzy-play6.com/20221112/6307_79a4bfc2/index.m3u8
 连云港新闻综合, https://migu.188766.xyz/?migutoken=a41779a620dd2b3316acd84c7365fac6&id=%E8%BF%9E%E4%BA%91%E6%B8%AF%E6%96%B0%E9%97%BB%E7%BB%BC%E5%90%88&type=yy
 追魂伞,https://vip.ffzy-play7.com/20221129/7753_bd15d501/index.m3u8
@@ -572,6 +572,7 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 陕西卫视,http://112.27.235.94:8000/hls/43/index.m3u8#http://hlsbkmgsplive.miguvideo.com/migu/kailu/shan3xiws/57/20220809/index.m3u8?msisdn=&mtv_session=&HlsSubType=1&HlsProfileId=1&nphaid=0&encrypt=
 陕西卫视,http://221.2.148.205:8154/tsfile/live/0136_1.m3u8
 陕西卫视,http://221.2.148.205:8154/tsfile/live/0136_1.m3u8?key=txiptv&playlive=1&authid=0
+陕西卫视,http://222.169.85.8:9901/tsfile/live/0136_1.m3u8?key=txiptv&playlive=1&authid=0
 陕西新闻资讯频道, https://migu.188766.xyz/?migutoken=0ad993ca87d73e43986ba15fa0c3ca15&id=%E9%99%95%E8%A5%BF%E6%96%B0%E9%97%BB%E8%B5%84%E8%AE%AF%E9%A2%91%E9%81%93&type=yy
 陕西秦腔频道, https://migu.188766.xyz/?migutoken=4e5ec21b95659a73df312dd4c4e62076&id=%E9%99%95%E8%A5%BF%E7%A7%A6%E8%85%94%E9%A2%91%E9%81%93&type=yy
 陕西都市青春频道, https://migu.188766.xyz/?migutoken=ff6bde866ebc92df82083bb3515eefbe&id=%E9%99%95%E8%A5%BF%E9%83%BD%E5%B8%82%E9%9D%92%E6%98%A5%E9%A2%91%E9%81%93&type=yy
@@ -579,7 +580,6 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 霍元甲,https://vip.ffzy-play2.com/20221021/234_50a8a4b6/index.m3u8
 霹雳大喇叭,https://vip.ffzy-play6.com/20221116/7273_4a3cfe1f/index.m3u8
 青海卫视, https://migu.188766.xyz/?migutoken=ba556cd2c5081fe9e111d8c2832680f3&id=qhws&type=sz
-青海卫视,http://221.2.148.205:8154/tsfile/live/0140_1.m3u8
 青海卫视,http://221.2.148.205:8154/tsfile/live/0140_1.m3u8?key=txiptv&playlive=1&authid=0
 青海卫视,https://zby.130519.xyz/PLTV/11/224/3221226105/index.m3u8
 非诚勿扰1,https://vip.ffzy-play2.com/20221021/162_cb2bb175/index.m3u8
@@ -595,12 +595,9 @@ bestvlive-9, http://[2409:8087:1e01:20::3]/PLTV/11/224/3221226102/1.m3u8
 鬼咬鬼,https://vip.ffzy-play7.com/20221208/8822_26a70529/index.m3u8
 鬼打鬼,https://vip.ffzy-play7.com/20221115/4476_05997c13/index.m3u8
 鬼打鬼之黄金道士,https://vip.ffzy-play6.com/20221112/6296_32b14901/index.m3u8
-鹿鼎记,http://c1.rrcdnbf6.com/video/ludingji/HD国语/index.m3u8
 黄大仙,https://vip.ffzy-play6.com/20221129/9334_1b618e68/index.m3u8
 黄河遥,https://vip.ffzy-play7.com/20221117/5148_d5633e82/index.m3u8
 黄飞鸿92之龙行天下,https://vip.ffzy-play7.com/20221129/7657_0e98ee6f/index.m3u8
-黄飞鸿之二:男儿当自强,https://cdn4.yzzy-tv-cdn.com/20220606/17341_21dfaf46/index.m3u8
-黄飞鸿之铁鸡斗蜈蚣,https://cdn2.yzzy-tv-cdn.com/20220415/13227_56714be0/index.m3u8
 黄飞鸿系列之一代宗师,https://vip.ffzy-play6.com/20221129/9335_097bc8c1/index.m3u8
 黎城综合,http://111.53.96.67:8081/live/1/index.m3u8#http://111.53.96.67:8081/live/1/index.m3u8?%E5%85%B3%E6%B3%A8%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7[%E6%99%B4%E5%9B%AD]
 黑侠,https://vip.ffzy-play6.com/20221112/6336_a08140a7/index.m3u8
