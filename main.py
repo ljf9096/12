@@ -1,19 +1,20 @@
-import urllib.request
+   import urllib.request
 from urllib.parse import urlparse
 import re
 import os
 from datetime import datetime, timedelta, timezone
 import random
 import opencc
-from typing import List, Set, Dict, Tuple, DefaultDict
-from collections import defaultdict
+from typing import List, Set, Dict, Tuple
+import concurrent.futures
+import time
 
 class TVChannelProcessor:
     def __init__(self):
         self.timestart = datetime.now()
         self.combined_blacklist = set()
         self.all_urls = set()  # For global URL deduplication
-        self.channel_sources = defaultdict(list)  # Stores sources for each channel with response times
+        self.channel_sources = {}  # Store multiple sources for each channel
         
         # Initialize all channel containers
         self.init_channel_containers()
@@ -150,42 +151,66 @@ class TVChannelProcessor:
             
         return channel_name
 
+    def test_url_speed(self, url: str, timeout: int = 5) -> float:
+        """Test URL response time in milliseconds"""
+        try:
+            start_time = time.time()
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+            req = urllib.request.Request(url, headers=headers)
+            response = urllib.request.urlopen(req, timeout=timeout)
+            response.read(1024)  # Read a small amount of data to test connection
+            end_time = time.time()
+            return (end_time - start_time) * 1000  # Convert to milliseconds
+        except Exception:
+            return float('inf')  # Return infinity for failed connections
+
     def process_channel_line(self, line: str):
         """Process a single channel line and categorize it"""
         if "#genre#" not in line and "#EXTINF:" not in line and "," in line and "://" in line:
             try:
-                parts = line.split(',')
-                
-                # Handle lines with response time (e.g., "200ms,ChannelName,URL")
-                if len(parts) == 3 and parts[0].endswith('ms'):
-                    response_time = float(parts[0].replace('ms', ''))
-                    channel_name = parts[1]
-                    channel_address = parts[2]
-                else:
-                    response_time = float('inf')  # Default to slowest if no time provided
-                    channel_name = parts[0]
-                    channel_address = parts[1]
-                
+                channel_name, channel_address = line.split(',', 1)
                 channel_name = self.traditional_to_simplified(channel_name)
                 channel_name = self.clean_channel_name(channel_name)
                 channel_name = self.corrections_name.get(channel_name, channel_name).strip()
                 
                 channel_address = self.clean_url(channel_address).strip()
-                line = f"{channel_name},{channel_address}"
                 
                 if not channel_address or channel_address in self.combined_blacklist:
                     return
-                    
-                if channel_address in self.all_urls:
-                    return
-                    
-                self.all_urls.add(channel_address)
                 
-                # Store source with response time
-                self.channel_sources[channel_name].append((response_time, line))
+                # Store channel sources for speed testing and selection
+                if channel_name not in self.channel_sources:
+                    self.channel_sources[channel_name] = []
+                
+                self.channel_sources[channel_name].append(channel_address)
                 
             except Exception as e:
                 print(f"Error processing channel line: {e}")
+
+    def select_fastest_sources(self, max_sources: int = 5):
+        """Select the fastest sources for each channel"""
+        print("Testing URL speeds...")
+        
+        # Test speeds for all sources
+        channel_speeds = {}
+        
+        for channel_name, sources in self.channel_sources.items():
+            print(f"Testing {len(sources)} sources for {channel_name}")
+            speeds = []
+            
+            # Test each source
+            for source in sources:
+                speed = self.test_url_speed(source)
+                speeds.append((source, speed))
+            
+            # Sort by speed (fastest first) and keep top max_sources
+            speeds.sort(key=lambda x: x[1])
+            fastest_sources = [source for source, speed in speeds[:max_sources] if speed != float('inf')]
+            
+            if fastest_sources:
+                channel_speeds[channel_name] = fastest_sources
+        
+        return channel_speeds
 
     def categorize_channel(self, channel_name: str, line: str):
         """Categorize channel based on its name"""
@@ -203,7 +228,6 @@ class TVChannelProcessor:
     def process_url(self, url: str):
         """Process a URL to extract channel information"""
         print(f"Processing URL: {url}")
-        self.other_lines.append(f"{url},#genre#")
         
         try:
             headers = {'User-Agent': 'PostmanRuntime-ApipostRuntime/1.1.0'}
@@ -237,9 +261,15 @@ class TVChannelProcessor:
                 
                 for line in lines:
                     if "#genre#" not in line and "," in line and "://" in line:
-                        self.process_channel_line(line)
-                
-                self.other_lines.append('\n')
+                        channel_name, channel_address = line.split(',', 1)
+                        
+                        if "#" not in channel_address:
+                            self.process_channel_line(line)
+                        else:
+                            url_list = channel_address.split('#')
+                            for channel_url in url_list:
+                                newline = f'{channel_name},{channel_url}'
+                                self.process_channel_line(newline)
                 
         except Exception as e:
             print(f"Error processing URL {url}: {e}")
@@ -285,17 +315,6 @@ class TVChannelProcessor:
         except Exception as e:
             print(f"Error generating M3U file: {e}")
 
-    def select_top_sources(self):
-        """Select top 5 fastest sources for each channel"""
-        for channel_name in self.channel_sources:
-            # Sort by response time (fastest first)
-            sorted_sources = sorted(self.channel_sources[channel_name], key=lambda x: x[0])
-            # Take top 5
-            top_sources = sorted_sources[:5]
-            # Add to appropriate category
-            for _, line in top_sources:
-                self.categorize_channel(channel_name, line)
-
     def run(self):
         """Main execution method"""
         # Load blacklists
@@ -322,49 +341,55 @@ class TVChannelProcessor:
         self.other_lines.append("白名单,#genre#")
         for line in self.whitelist_lines:
             self.process_channel_line(line)
-            
-        self.other_lines.append("白名单测速,#genre#")
-        for line in self.whitelist_auto_lines:
-            if "#genre#" not in line and "," in line and "://" in line:
-                self.process_channel_line(line)
         
         # Process URLs
         for url in urls:
             if url.startswith("http"):
                 self.process_url(url)
         
-        # Select top 5 sources for each channel
-        self.select_top_sources()
+        # Select fastest sources for each channel
+        fastest_sources = self.select_fastest_sources(max_sources=5)
+        
+        # Categorize the fastest sources
+        for channel_name, sources in fastest_sources.items():
+            for source in sources:
+                line = f"{channel_name},{source}"
+                self.categorize_channel(channel_name, line)
         
         # Generate output files
         self.generate_output_files()
         
-        # Generate M3U file
+        # Generate M3U file (only live.m3u, no live_lite.m3u)
         self.make_m3u("live.txt", "live.m3u")
         
         # Print statistics
         self.print_statistics()
 
     def generate_output_files(self):
-        """Generate the output TXT files"""
+        """Generate the output TXT files (only live.txt, no live_lite.txt)"""
         # Get current time
         utc_time = datetime.now(timezone.utc)
         beijing_time = utc_time + timedelta(hours=8)
         formatted_time = beijing_time.strftime("%Y%m%d %H:%M")
         
-        # 只保留更新时间
+        # 只保留更新时间，删除"关于本源"
         version = f"{formatted_time}"
         
-        # Generate content
+        # Generate content for full version
         all_lines = [
             "更新时间,#genre#", version, '\n',
             "央视频道,#genre#"
         ] + self.read_txt_to_array('专区/央视频道.txt') + self.sort_data(self.ys_dictionary, self.ys_lines) + ['\n'] + [
             "卫视频道,#genre#"
         ] + self.read_txt_to_array('专区/卫视频道.txt') + self.sort_data(self.ws_dictionary, self.ws_lines) + ['\n']
-        # ... continue building the content
+        # ... continue building the content with other categories
         
-        # Write files
+        # Add other categories
+        all_lines += [
+            "其他频道,#genre#"
+        ] + self.other_lines
+        
+        # Write files (only live.txt, no live_lite.txt)
         try:
             with open("live.txt", 'w', encoding='utf-8') as f:
                 f.write('\n'.join(all_lines))
@@ -385,10 +410,19 @@ class TVChannelProcessor:
         minutes = int(total_seconds // 60)
         seconds = int(total_seconds % 60)
         
+        total_channels = sum(len(lines) for lines in [
+            self.ys_lines, self.ws_lines, self.ty_lines, self.dy_lines, 
+            self.dsj_lines, self.gat_lines, self.twt_lines, self.gj_lines,
+            self.jlp_lines, self.xq_lines, self.js_lines, self.newtv_lines,
+            self.ihot_lines, self.et_lines, self.zy_lines, self.mdd_lines,
+            self.yy_lines, self.game_lines, self.radio_lines, self.zb_lines,
+            self.cw_lines, self.mtv_lines, self.migu_lines, self.other_lines
+        ])
+        
         print(f"执行时间: {minutes} 分 {seconds} 秒")
         print(f"blacklist行数: {len(self.combined_blacklist)}")
-        print(f"live.txt行数: {len(self.all_urls)}")
-        print(f"others.txt行数: {len(self.other_lines)}")
+        print(f"总频道数: {total_channels}")
+        print(f"每个频道最多保留5个最快源")
 
 if __name__ == "__main__":
     processor = TVChannelProcessor()
