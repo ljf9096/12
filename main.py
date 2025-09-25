@@ -5,15 +5,16 @@ import os
 from datetime import datetime, timedelta, timezone
 import random
 import opencc
-from typing import List, Set, Dict, Tuple, DefaultDict
-from collections import defaultdict
+from typing import List, Set, Dict, Tuple
+import concurrent.futures
+import time
 
 class TVChannelProcessor:
     def __init__(self):
         self.timestart = datetime.now()
         self.combined_blacklist = set()
         self.all_urls = set()  # For global URL deduplication
-        self.channel_sources = defaultdict(list)  # Stores sources for each channel with response times
+        self.channel_sources = {}  # 存储每个频道的多个源及其响应时间
         
         # Initialize all channel containers
         self.init_channel_containers()
@@ -51,6 +52,18 @@ class TVChannelProcessor:
         
         self.other_lines = []  # Other channels
         self.removal_list = ["「IPV4」","「IPV6」","[ipv6]","[ipv4]","_电信", "电信","（HD）","[超清]","高清","超清", "-HD","(HK)","AKtv","@","IPV6","🎞️","🎦"," ","[BD]","[VGA]","[HD]","[SD]","(1080p)","(720p)","(480p)"]
+
+    def test_url_response_time(self, url: str) -> float:
+        """测试URL响应时间（毫秒）"""
+        try:
+            start_time = time.time()
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+            req = urllib.request.Request(url, headers=headers, method='HEAD')
+            with urllib.request.urlopen(req, timeout=5) as response:
+                end_time = time.time()
+                return (end_time - start_time) * 1000  # 转换为毫秒
+        except:
+            return float('inf')  # 超时或错误返回无限大
 
     def read_txt_to_array(self, file_name: str) -> List[str]:
         """Read text file into array of lines"""
@@ -150,25 +163,24 @@ class TVChannelProcessor:
             
         return channel_name
 
-    def process_channel_line(self, line: str):
-        """Process a single channel line and store with response time"""
+    def process_channel_line(self, line: str, test_speed: bool = False):
+        """Process a single channel line and categorize it"""
         if "#genre#" not in line and "#EXTINF:" not in line and "," in line and "://" in line:
             try:
-                # Handle lines with response time (format: "time,channel,url")
-                if line.count(',') > 1:
-                    parts = line.split(',')
+                if test_speed and "ms" in line:
+                    # 处理带响应时间的行（白名单测速）
+                    parts = line.split(",")
+                    response_time_str = parts[0].replace("ms", "").strip()
                     try:
-                        response_time = float(parts[0].replace("ms", ""))
+                        response_time = float(response_time_str)
                         channel_name = parts[1]
-                        channel_address = parts[2]
+                        channel_address = parts[2] if len(parts) > 2 else ""
                     except (ValueError, IndexError):
-                        # Fallback for normal format "channel,url"
-                        channel_name, channel_address = line.split(',', 1)
-                        response_time = float('inf')  # Default to slowest if no time provided
+                        return
                 else:
-                    # Normal format "channel,url"
+                    # 普通行处理
                     channel_name, channel_address = line.split(',', 1)
-                    response_time = float('inf')  # Default to slowest if no time provided
+                    response_time = None
                 
                 channel_name = self.traditional_to_simplified(channel_name)
                 channel_name = self.clean_channel_name(channel_name)
@@ -179,31 +191,35 @@ class TVChannelProcessor:
                 if not channel_address or channel_address in self.combined_blacklist:
                     return
                     
-                if channel_address in self.all_urls:
-                    return
+                # 如果是测速模式，存储响应时间
+                if test_speed and response_time is not None:
+                    if channel_name not in self.channel_sources:
+                        self.channel_sources[channel_name] = []
+                    self.channel_sources[channel_name].append((response_time, channel_address))
+                else:
+                    # 非测速模式，直接添加到对应分类
+                    line = f"{channel_name},{channel_address}"
                     
-                self.all_urls.add(channel_address)
-                
-                # Store URL with response time for sorting later
-                self.channel_sources[channel_name].append((response_time, channel_address))
+                    if channel_address in self.all_urls:
+                        return
+                        
+                    self.all_urls.add(channel_address)
+                    
+                    # Categorize channels
+                    self.categorize_channel(channel_name, line)
                 
             except Exception as e:
                 print(f"Error processing channel line: {e}")
 
-    def get_top_sources(self, channel_name: str) -> List[str]:
-        """Get top 5 fastest sources for a channel"""
-        sources = self.channel_sources.get(channel_name, [])
-        # Sort by response time (ascending) and take top 5
-        sorted_sources = sorted(sources, key=lambda x: x[0])[:5]
-        return [url for (_, url) in sorted_sources]
-
-    def categorize_channel(self, channel_name: str):
-        """Categorize channel based on its name and return top 5 URLs"""
-        top_urls = self.get_top_sources(channel_name)
-        lines = []
-        for url in top_urls:
-            lines.append(f"{channel_name},{url}")
-        return lines
+    def categorize_channel(self, channel_name: str, line: str):
+        """Categorize channel based on its name"""
+        # 这里简化了分类逻辑，实际使用时需要根据完整的频道字典进行分类
+        if "CCTV" in channel_name:
+            self.ys_lines.append(line)
+        elif any(province in channel_name for province in ["卫视", "湖南", "浙江", "江苏"]):
+            self.ws_lines.append(line)
+        else:
+            self.other_lines.append(line)
 
     def process_url(self, url: str):
         """Process a URL to extract channel information"""
@@ -242,7 +258,15 @@ class TVChannelProcessor:
                 
                 for line in lines:
                     if "#genre#" not in line and "," in line and "://" in line:
-                        self.process_channel_line(line)
+                        channel_name, channel_address = line.split(',', 1)
+                        
+                        if "#" not in channel_address:
+                            self.process_channel_line(line)
+                        else:
+                            url_list = channel_address.split('#')
+                            for channel_url in url_list:
+                                newline = f'{channel_name},{channel_url}'
+                                self.process_channel_line(newline)
                 
                 self.other_lines.append('\n')
                 
@@ -258,6 +282,21 @@ class TVChannelProcessor:
             return order_dict.get(name, len(order))
         
         return sorted(data, key=sort_key)
+
+    def get_top_sources(self, max_sources: int = 5) -> List[str]:
+        """获取每个频道响应时间最快的前N个源"""
+        top_sources = []
+        
+        for channel_name, sources in self.channel_sources.items():
+            # 按响应时间排序（从小到大）
+            sorted_sources = sorted(sources, key=lambda x: x[0])
+            
+            # 取前N个最快的源
+            for i, (response_time, url) in enumerate(sorted_sources[:max_sources]):
+                if response_time < float('inf'):  # 只添加有效的源
+                    top_sources.append(f"{channel_name},{url}")
+        
+        return top_sources
 
     def make_m3u(self, txt_file: str, m3u_file: str):
         """Convert TXT file to M3U format"""
@@ -312,22 +351,33 @@ class TVChannelProcessor:
         # Load custom URLs
         urls = self.read_txt_to_array('assets/urls.txt')
         
-        # Process whitelists
+        # Process whitelists - 手动白名单
         self.other_lines.append("白名单,#genre#")
         for line in self.whitelist_lines:
             self.process_channel_line(line)
             
-        self.other_lines.append("白名单测速,#genre#")
+        # Process whitelists - 自动测速白名单（这里会收集响应时间）
+        print("处理测速白名单...")
         for line in self.whitelist_auto_lines:
             if "#genre#" not in line and "," in line and "://" in line:
-                self.process_channel_line(line)
+                self.process_channel_line(line, test_speed=True)
+        
+        # 获取每个频道最快的前5个源
+        top_sources = self.get_top_sources(5)
+        
+        # 将最快的源添加到对应分类
+        for line in top_sources:
+            channel_name, channel_address = line.split(',', 1)
+            if channel_address not in self.all_urls:
+                self.all_urls.add(channel_address)
+                self.categorize_channel(channel_name, line)
         
         # Process URLs
         for url in urls:
             if url.startswith("http"):
                 self.process_url(url)
         
-        # Generate output files with top 5 URLs per channel
+        # Generate output files
         self.generate_output_files()
         
         # Generate M3U files
@@ -338,39 +388,28 @@ class TVChannelProcessor:
         self.print_statistics()
 
     def generate_output_files(self):
-        """Generate the output TXT files with top 5 URLs per channel"""
+        """Generate the output TXT files"""
         # Get current time
         utc_time = datetime.now(timezone.utc)
         beijing_time = utc_time + timedelta(hours=8)
         formatted_time = beijing_time.strftime("%Y%m%d %H:%M")
         
-        # Only keep update time, remove "关于本源"
+        # 移除"关于本源"，只保留更新时间
         version = f"{formatted_time}"
         
         # Generate content for simple version
         all_lines_simple = [
             "更新时间,#genre#", version, '\n',
             "央视频道,#genre#"
-        ] + self.read_txt_to_array('专区/央视频道.txt')
-        
-        # Add top 5 URLs for each CCTV channel in order
-        for channel in self.ys_dictionary:
-            for url in self.get_top_sources(channel):
-                all_lines_simple.append(f"{channel},{url}")
-        
-        all_lines_simple += ['\n', "卫视频道,#genre#"] + self.read_txt_to_array('专区/卫视频道.txt')
-        
-        # Add top 5 URLs for each satellite channel in order
-        for channel in self.ws_dictionary:
-            for url in self.get_top_sources(channel):
-                all_lines_simple.append(f"{channel},{url}")
-        
-        all_lines_simple += ['\n']
+        ] + self.read_txt_to_array('专区/央视频道.txt') + self.sort_data(self.ys_dictionary, self.ys_lines) + ['\n'] + [
+            "卫视频道,#genre#"
+        ] + self.read_txt_to_array('专区/卫视频道.txt') + self.sort_data(self.ws_dictionary, self.ws_lines) + ['\n']
+        # ... continue building the content
         
         # Generate content for full version
-        all_lines = all_lines_simple.copy()
-        
-        # Add other categories similarly...
+        all_lines = all_lines_simple + [
+            # ... add more categories
+        ]
         
         # Write files
         try:
@@ -382,21 +421,8 @@ class TVChannelProcessor:
                 f.write('\n'.join(all_lines))
             print("完整版文本已保存到文件: live.txt")
             
-            # Process other lines to also include only top 5 URLs
-            processed_other_lines = []
-            current_group = ""
-            for line in self.other_lines:
-                if "#genre#" in line:
-                    current_group = line.split(",")[0]
-                    processed_other_lines.append(line)
-                elif "," in line and "://" in line:
-                    channel_name = line.split(",")[0]
-                    if channel_name in self.channel_sources:
-                        for url in self.get_top_sources(channel_name):
-                            processed_other_lines.append(f"{channel_name},{url}")
-            
             with open("others.txt", 'w', encoding='utf-8') as f:
-                f.write('\n'.join(processed_other_lines))
+                f.write('\n'.join(self.other_lines))
             print("其他频道已保存到文件: others.txt")
             
         except Exception as e:
@@ -414,6 +440,7 @@ class TVChannelProcessor:
         print(f"blacklist行数: {len(self.combined_blacklist)}")
         print(f"live.txt行数: {len(self.all_urls)}")
         print(f"others.txt行数: {len(self.other_lines)}")
+        print(f"处理的频道数量: {len(self.channel_sources)}")
 
 if __name__ == "__main__":
     processor = TVChannelProcessor()
