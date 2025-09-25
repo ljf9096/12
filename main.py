@@ -339,20 +339,19 @@ class TVChannelProcessor:
         beijing_time = utc_time + timedelta(hours=8)
         formatted_time = beijing_time.strftime("%Y%m%d %H:%M")
         
-        # 移除视频链接，只保留更新时间
+        # 移除视频链接，只保留更新时间（已删除"关于本源"）
         version = f"{formatted_time}"
-        about = "关于本源"
         
         # Generate content for full version
         all_lines = [
-            "更新时间,#genre#", version, about, '\n',
+            "更新时间,#genre#", version, '\n',  # 移除"about"变量及对应文本
             "央视频道,#genre#"
         ] + self.read_txt_to_array('专区/央视频道.txt') + self.sort_data(self.ys_dictionary, self.ys_lines) + ['\n'] + [
             "卫视频道,#genre#"
         ] + self.read_txt_to_array('专区/卫视频道.txt') + self.sort_data(self.ws_dictionary, self.ws_lines) + ['\n']
         # ... continue building the content for full version
         
-        # Write files
+        # Write files (仅保留live.txt和others.txt，删除live_lite相关写入逻辑)
         try:
             with open("live.txt", 'w', encoding='utf-8') as f:
                 f.write('\n'.join(all_lines))
@@ -380,4 +379,4 @@ class TVChannelProcessor:
 
 if __name__ == "__main__":
     processor = TVChannelProcessor()
-    processor.run()                
+    processor.run()
