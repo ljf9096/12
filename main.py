@@ -16,6 +16,9 @@ class TVChannelProcessor:
         # Initialize all channel containers
         self.init_channel_containers()
         
+        # 存储每个频道的URL和响应时间
+        self.channel_urls = {}  # channel_name -> list of (url, response_time)
+        
     def init_channel_containers(self):
         # Main channels
         self.ys_lines = []  # CCTV channels
@@ -148,6 +151,18 @@ class TVChannelProcessor:
             
         return channel_name
 
+    def test_url_response_time(self, url: str) -> float:
+        """Test URL response time in milliseconds"""
+        try:
+            start_time = datetime.now()
+            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+            req = urllib.request.Request(url, headers=headers)
+            urllib.request.urlopen(req, timeout=5)
+            end_time = datetime.now()
+            return (end_time - start_time).total_seconds() * 1000  # Convert to milliseconds
+        except:
+            return float('inf')  # Return infinity for failed connections
+
     def process_channel_line(self, line: str):
         """Process a single channel line and categorize it"""
         if "#genre#" not in line and "#EXTINF:" not in line and "," in line and "://" in line:
@@ -158,7 +173,6 @@ class TVChannelProcessor:
                 channel_name = self.corrections_name.get(channel_name, channel_name).strip()
                 
                 channel_address = self.clean_url(channel_address).strip()
-                line = f"{channel_name},{channel_address}"
                 
                 if not channel_address or channel_address in self.combined_blacklist:
                     return
@@ -168,8 +182,13 @@ class TVChannelProcessor:
                     
                 self.all_urls.add(channel_address)
                 
-                # Categorize channels
-                self.categorize_channel(channel_name, line)
+                # Test response time and store URL
+                response_time = self.test_url_response_time(channel_address)
+                
+                if channel_name not in self.channel_urls:
+                    self.channel_urls[channel_name] = []
+                
+                self.channel_urls[channel_name].append((channel_address, response_time))
                 
             except Exception as e:
                 print(f"Error processing channel line: {e}")
@@ -249,6 +268,14 @@ class TVChannelProcessor:
         
         return sorted(data, key=sort_key)
 
+    def limit_channels_to_top5(self):
+        """Limit each channel to top 5 fastest responding URLs"""
+        for channel_name in self.channel_urls:
+            # Sort URLs by response time (ascending)
+            sorted_urls = sorted(self.channel_urls[channel_name], key=lambda x: x[1])
+            # Keep only top 5
+            self.channel_urls[channel_name] = sorted_urls[:5]
+
     def make_m3u(self, txt_file: str, m3u_file: str):
         """Convert TXT file to M3U format"""
         try:
@@ -323,6 +350,9 @@ class TVChannelProcessor:
             if url.startswith("http"):
                 self.process_url(url)
         
+        # Limit each channel to top 5 fastest URLs
+        self.limit_channels_to_top5()
+        
         # Generate output files
         self.generate_output_files()
         
@@ -339,19 +369,28 @@ class TVChannelProcessor:
         beijing_time = utc_time + timedelta(hours=8)
         formatted_time = beijing_time.strftime("%Y%m%d %H:%M")
         
-        # 移除视频链接，只保留更新时间（已删除"关于本源"）
+        # 只保留更新时间
         version = f"{formatted_time}"
         
+        # 重新初始化频道容器
+        self.init_channel_containers()
+        
+        # 将处理后的频道URL添加到对应的分类中
+        for channel_name, urls in self.channel_urls.items():
+            for url, response_time in urls:
+                line = f"{channel_name},{url}"
+                self.categorize_channel(channel_name, line)
+
         # Generate content for full version
         all_lines = [
-            "更新时间,#genre#", version, '\n',  # 移除"about"变量及对应文本
+            "更新时间,#genre#", version, '\n',
             "央视频道,#genre#"
         ] + self.read_txt_to_array('专区/央视频道.txt') + self.sort_data(self.ys_dictionary, self.ys_lines) + ['\n'] + [
             "卫视频道,#genre#"
         ] + self.read_txt_to_array('专区/卫视频道.txt') + self.sort_data(self.ws_dictionary, self.ws_lines) + ['\n']
         # ... continue building the content for full version
         
-        # Write files (仅保留live.txt和others.txt，删除live_lite相关写入逻辑)
+        # Write files (仅保留live.txt和others.txt)
         try:
             with open("live.txt", 'w', encoding='utf-8') as f:
                 f.write('\n'.join(all_lines))
@@ -372,9 +411,14 @@ class TVChannelProcessor:
         minutes = int(total_seconds // 60)
         seconds = int(total_seconds % 60)
         
+        # 计算总频道数和URL数
+        total_channels = len(self.channel_urls)
+        total_urls = sum(len(urls) for urls in self.channel_urls.values())
+        
         print(f"执行时间: {minutes} 分 {seconds} 秒")
         print(f"blacklist行数: {len(self.combined_blacklist)}")
-        print(f"live.txt行数: {len(self.all_urls)}")
+        print(f"总频道数: {total_channels}")
+        print(f"总URL数: {total_urls} (每个频道最多5个最快源)")
         print(f"others.txt行数: {len(self.other_lines)}")
 
 if __name__ == "__main__":
