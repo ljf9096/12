@@ -1,0 +1,7 @@
+白名单,#genre#
+白名单测速,#genre#
+http://39.162.21.133:88/tv.txt,#genre#
+https://gitee.com/yb1985/tv/raw/master/dx,#genre#
+http://8.138.7.223/henan.txt,#genre#
+https://live.lizanyang.top/hn.m3u,#genre#
+https://cdn.jsdelivr.net/gh/xuelong876/kodi@main/yd.m3u,#genre#
