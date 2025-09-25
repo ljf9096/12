@@ -1,4 +1,4 @@
-name:"2"
+name:"Daily Job"
 
 on:
   workflow_dispatch:
