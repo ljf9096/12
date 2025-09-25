@@ -6,14 +6,12 @@ from datetime import datetime, timedelta, timezone
 import random
 import opencc
 from typing import List, Set, Dict, Tuple
-import time
 
 class TVChannelProcessor:
     def __init__(self):
         self.timestart = datetime.now()
         self.combined_blacklist = set()
         self.all_urls = set()  # For global URL deduplication
-        self.channel_sources = {}  # Store multiple sources per channel
         
         # Initialize all channel containers
         self.init_channel_containers()
@@ -150,38 +148,6 @@ class TVChannelProcessor:
             
         return channel_name
 
-    def test_url_response_time(self, url: str) -> float:
-        """Test URL response time in milliseconds"""
-        try:
-            start_time = time.time()
-            headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-            req = urllib.request.Request(url, headers=headers)
-            with urllib.request.urlopen(req, timeout=5) as response:
-                response.read(1024)  # Read a small amount of data
-            end_time = time.time()
-            return (end_time - start_time) * 1000  # Convert to milliseconds
-        except Exception:
-            return float('inf')  # Return infinity for failed connections
-
-    def add_channel_source(self, channel_name: str, channel_url: str):
-        """Add a channel source with response time testing"""
-        if not channel_url or channel_url in self.combined_blacklist:
-            return
-            
-        # Test response time
-        response_time = self.test_url_response_time(channel_url)
-        
-        # Add to channel sources dictionary
-        if channel_name not in self.channel_sources:
-            self.channel_sources[channel_name] = []
-        
-        # Add source with response time
-        self.channel_sources[channel_name].append((response_time, channel_url))
-        
-        # Keep only top 5 fastest sources
-        self.channel_sources[channel_name].sort(key=lambda x: x[0])
-        self.channel_sources[channel_name] = self.channel_sources[channel_name][:5]
-
     def process_channel_line(self, line: str):
         """Process a single channel line and categorize it"""
         if "#genre#" not in line and "#EXTINF:" not in line and "," in line and "://" in line:
@@ -192,12 +158,18 @@ class TVChannelProcessor:
                 channel_name = self.corrections_name.get(channel_name, channel_name).strip()
                 
                 channel_address = self.clean_url(channel_address).strip()
+                line = f"{channel_name},{channel_address}"
                 
-                if not channel_address:
+                if not channel_address or channel_address in self.combined_blacklist:
                     return
                     
-                # Add to channel sources instead of directly to lines
-                self.add_channel_source(channel_name, channel_address)
+                if channel_address in self.all_urls:
+                    return
+                    
+                self.all_urls.add(channel_address)
+                
+                # Categorize channels
+                self.categorize_channel(channel_name, line)
                 
             except Exception as e:
                 print(f"Error processing channel line: {e}")
@@ -266,14 +238,6 @@ class TVChannelProcessor:
                 
         except Exception as e:
             print(f"Error processing URL {url}: {e}")
-
-    def convert_channel_sources_to_lines(self):
-        """Convert channel sources to final lines for each category"""
-        # Process all collected channel sources
-        for channel_name, sources in self.channel_sources.items():
-            for response_time, url in sources:
-                line = f"{channel_name},{url}"
-                self.categorize_channel(channel_name, line)
 
     def sort_data(self, order: List[str], data: List[str]) -> List[str]:
         """Sort data based on a specified order"""
@@ -359,13 +323,10 @@ class TVChannelProcessor:
             if url.startswith("http"):
                 self.process_url(url)
         
-        # Convert channel sources to final lines
-        self.convert_channel_sources_to_lines()
-        
         # Generate output files
         self.generate_output_files()
         
-        # Generate M3U file (only live.m3u, no live_lite.m3u)
+        # Generate M3U file (only live.m3u now)
         self.make_m3u("live.txt", "live.m3u")
         
         # Print statistics
@@ -378,19 +339,20 @@ class TVChannelProcessor:
         beijing_time = utc_time + timedelta(hours=8)
         formatted_time = beijing_time.strftime("%Y%m%d %H:%M")
         
-        # 只保留更新时间
+        # 移除视频链接，只保留更新时间
         version = f"{formatted_time}"
+        about = "关于本源"
         
         # Generate content for full version
         all_lines = [
-            "更新时间,#genre#", version, '\n',
+            "更新时间,#genre#", version, about, '\n',
             "央视频道,#genre#"
         ] + self.read_txt_to_array('专区/央视频道.txt') + self.sort_data(self.ys_dictionary, self.ys_lines) + ['\n'] + [
             "卫视频道,#genre#"
         ] + self.read_txt_to_array('专区/卫视频道.txt') + self.sort_data(self.ws_dictionary, self.ws_lines) + ['\n']
-        # ... continue building the content with other categories
+        # ... continue building the content for full version
         
-        # Write files (only live.txt, no live_lite.txt)
+        # Write files
         try:
             with open("live.txt", 'w', encoding='utf-8') as f:
                 f.write('\n'.join(all_lines))
@@ -411,15 +373,11 @@ class TVChannelProcessor:
         minutes = int(total_seconds // 60)
         seconds = int(total_seconds % 60)
         
-        # Count total unique channels
-        total_channels = sum(len(sources) for sources in self.channel_sources.values())
-        
         print(f"执行时间: {minutes} 分 {seconds} 秒")
         print(f"blacklist行数: {len(self.combined_blacklist)}")
-        print(f"唯一频道数量: {len(self.channel_sources)}")
-        print(f"总直播源数量: {total_channels}")
+        print(f"live.txt行数: {len(self.all_urls)}")
         print(f"others.txt行数: {len(self.other_lines)}")
 
 if __name__ == "__main__":
     processor = TVChannelProcessor()
-    processor.run()
+    processor.run()                
