@@ -5,7 +5,7 @@ on:
      schedule:
     # 每天凌晨17点（UTC+8 为周2凌晨1点）
     - cron: '0 17 * * 2'
-  workflow_dispatch: # 允许手动触发
+   workflow_dispatch: # 允许手动触发
 
 jobs:
   run_job:
