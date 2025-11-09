@@ -2,9 +2,8 @@ name:a/w/main.py1
 
 on:
   schedule:
-    # 每周二北京时间凌晨1点
-    # UTC 时间 = 北京时间 - 1小时 = 周二 17:00
-    # 格式: 分 时 日 月 周 (0-6, 0=周日, 3=周二)
+     schedule:
+    # 每天凌晨17点（UTC+8 为周2凌晨1点）
     - cron: '0 17 * * 2'
   workflow_dispatch: # 允许手动触发
 
